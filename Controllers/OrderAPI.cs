@@ -80,7 +80,10 @@ public class OrderAPI : ControllerBase
         }
 
         if (debugMode)
+        {
+            // Console.WriteLine(printCategories); TODO better debug print
             return Ok(printCategories);
+        }
 
         // TODO logo
         // Use the vars defined before to printe the receipt
