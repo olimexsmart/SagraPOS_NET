@@ -36,6 +36,26 @@
                 "${workspaceFolder}/SagraPOS.csproj"
             ],
             "problemMatcher": "$msCompile"
+        },
+        {
+            "type": "shell",
+            // "script": "start",
+            "command": "npm run --prefix ClientApp start",
+            "label": "npmStart",
+            "isBackground": true,
+            "problemMatcher": {
+                "owner": "typescript",
+                "pattern": "$tsc",
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": {
+                        "regexp": "(.*?)"
+                    },
+                    "endsPattern": {
+                        "regexp": "bundle generation complete"
+                    }
+                }
+            }
         }
     ]
 }

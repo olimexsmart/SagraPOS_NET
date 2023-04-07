@@ -1,0 +1,57 @@
+.example-spacer {
+    flex: 1 1 auto;
+}
+
+.example-icon {
+    padding: 0 14px;
+}
+
+.example-container {
+    height: 90%;
+}
+
+/* .example-sidenav-content {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+} */
+
+/* .example-sidenav {
+    padding: 20px;
+} */
+
+.content {
+    padding: 16px;
+}
+
+.entryCard {
+    cursor: pointer;
+}
+
+.cardImageStandardize {
+    min-height: 150px;
+    max-height: 150px;
+    object-fit: cover;
+}
+
+.sidenav-container {
+    top: 64px !important;
+    /* What if the toolbar has a different size? */
+}
+
+.sidenav-lateral {
+    min-width: 25%;
+}
+
+@media(max-width: 599px) {
+    .sidenav-container {
+        top: 56px !important;
+    }
+
+    .sidenav-lateral {
+        min-width: 100%;
+        top: 56px !important;
+    }
+}
+
