@@ -11,16 +11,20 @@ export class OrderService {
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) { }
 
   postPrintOrder(order : Map<MenuEntry, number>, total :  number) : Observable<boolean> {
-    let plainOrder: any = {
-      total: total,
-      items: []
-    }
+    let plainOrder: OrderEntryDTO[] = []
     for(const [key, value] of order) {
-      let plain : any = key
-      plain.quantity = value
-      plainOrder.items.push(plain)
+      plainOrder.push({
+        EntryID: key.id,
+        Quantity: value
+      })
     }
     console.log(plainOrder)
     return this.http.post<boolean>(this.baseUrl + 'ConfirmOrder', plainOrder)
   }
+}
+
+interface OrderEntryDTO
+{
+    EntryID: number,
+    Quantity: number
 }

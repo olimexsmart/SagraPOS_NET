@@ -30,7 +30,7 @@ import { MainComponent } from './main/main.component';
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot([
-      // { path: '', component: HomeComponent, pathMatch: 'full' },
+      // { path: '', component: HomeComponent, pathMatch: 'full' }, // TODO add 404 page
       // { path: 'counter', component: CounterComponent },
       { path: '', redirectTo: '/main', pathMatch: 'full' },
       { path: 'main', component: MainComponent },

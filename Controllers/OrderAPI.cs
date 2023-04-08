@@ -18,7 +18,7 @@ public class OrderAPI : ControllerBase
     private readonly bool debugMode;
     private readonly string printerIP;
     private readonly int printerPort;
-    private const string dashLine = "---------------------";
+    private readonly string dashLine;
     private readonly ImmediateNetworkPrinter printer;
 
     public OrderAPI(ILogger<OrderAPI> logger, IConfiguration configuration, MenuDB db)
@@ -39,6 +39,7 @@ public class OrderAPI : ControllerBase
             ConnectionString = $"{printerIP}:{printerPort}",
             PrinterName = "P3"
         });
+        dashLine = configuration["Printer:dashLine"] ?? throw new NullReferenceException("Missing printer dashLine setting");
     }
 
     [HttpPost]
@@ -55,7 +56,7 @@ public class OrderAPI : ControllerBase
         // Fill these variable getting result from DB
         float total = 0;
         Dictionary<int, Dictionary<string, int>> printCategories = new();
-        // Dictionary<int, int> printQuantities = new();
+        bool hasTens = false; // True if some quantity ha 2 digits // TODO set a maximum quantity value
         foreach (var o in orderToPrint)
         {
             // Get MenuEntry object from db
@@ -77,8 +78,12 @@ public class OrderAPI : ControllerBase
             printCategories[me.categoryID].Add(me.name, o.Quantity);
             // Update total
             total += me.price * o.Quantity;
+            // Update tens presence
+            hasTens |= o.Quantity >= 10;
         }
-
+        // Get categories names by ID
+        Dictionary<int, string> categoryNames = db.categories.ToDictionary(k => k.ID, v => v.name);
+        // Stop here if in debug mode
         if (debugMode)
         {
             // Console.WriteLine(printCategories); TODO better debug print
@@ -89,38 +94,46 @@ public class OrderAPI : ControllerBase
         // Use the vars defined before to printe the receipt
         var e = new EPSON();
         ByteArrayBuilder bab = new();
-        bab.Append(e.LeftAlign());
         // Loop on categories
         foreach (var category in printCategories)
         {
-            bab.Append(e.SetStyles(PrintStyle.DoubleHeight | PrintStyle.DoubleWidth | PrintStyle.Bold));
-            bab.Append(e.PrintLine(dashLine));
+            // Title with category name
+            bab.Append(PrinterSetDimensions(0, 0));
+            bab.Append(e.SetStyles(PrintStyle.Italic | PrintStyle.Bold));
+            bab.Append(e.CenterAlign());
+            bab.Append(e.PrintLine("------ " + categoryNames[category.Key].ToUpper() + " ------"));
+            bab.Append(e.PrintLine(""));
+            // Body with the ordered entries
+            bab.Append(e.LeftAlign());
+            bab.Append(e.SetStyles(PrintStyle.Bold));
+            bab.Append(PrinterSetDimensions(3, 1));
             foreach (var entry in category.Value)
             {
-                bab.Append(e.PrintLine($"{entry.Key,-18}{entry.Value,2}X"));
-                bab.Append(e.PrintLine(dashLine));
-                bab.Append(e.PrintLine(dashLine));
-                bab.Append(e.PrintLine(dashLine));
-                bab.Append(e.PrintLine(dashLine));
-                // bab.Append(e.PrintLine(""));
-                // bab.Append(e.PrintLine(""));
-                // bab.Append(e.PrintLine(""));
-                // bab.Append(e.PrintLine(""));
+                if (hasTens)
+                    bab.Append(e.PrintLine($"{entry.Key.ToUpper(),-18}x{entry.Value,2}"));
+                else
+                    bab.Append(e.PrintLine($"{entry.Key.ToUpper(),-19}x{entry.Value,1}"));
             }
-            bab.Append(e.PrintLine(dashLine));
-            bab.Append(e.SetStyles(PrintStyle.None));
-            // bab.Append(e.FullCut());
-            bab.Append(0x1b);
-            bab.Append(0x6d);
-
+            bab.Append(e.FullCut());
         }
-        /*
-        var deb = bab.ToArray();
-        StringBuilder hex = new StringBuilder(deb.Length * 2);
-        foreach (byte b in deb)
-            hex.AppendFormat("{0:x2}\n", b);
-        Console.WriteLine(hex.ToString());
-        */
+        // Order total
+        bab.Append(e.Print($"TOTALE:         "));
+        bab.Append(ByteSplicer.Combine(
+        e.CodePage(CodePage.PC858_EURO),
+        new byte[] { 0xD5 },
+        e.CodePage(CodePage.PC437_USA_STANDARD_EUROPE_DEFAULT)));
+        bab.Append(e.PrintLine($"{total, 2:.00}"));
+        // Additional info
+        bab.Append(e.CenterAlign());
+        bab.Append(e.SetStyles(PrintStyle.Italic | PrintStyle.Bold));
+        bab.Append(e.PrintLine(""));
+        bab.Append(e.PrintLine("IL RICAVATO VIENE DEVOLUTO IN BENEFICENZA"));
+        bab.Append(e.PrintImage(System.IO.File.ReadAllBytes("logo.jpg"), true, isLegacy: true, maxWidth: 350));
+        bab.Append(e.SetStyles(PrintStyle.None));
+        bab.Append(e.PrintLine(""));
+        bab.Append(e.PrintLine("github.com/olimexsmart/sagraPOS"));
+        bab.Append(e.FullCut());
+
         try
         {
             await printer.WriteAsync(bab.ToArray());
@@ -177,5 +190,12 @@ public class OrderAPI : ControllerBase
         );*/
 
         return Ok();
+    }
+
+    private byte[] PrinterSetDimensions(int heigth, int width)
+    {
+        if (heigth > 7) heigth = 7;
+        if (width > 7) width = 7;
+        return new byte[] { 0x1D, 0x21, (byte)((width << 4) + heigth) };
     }
 }

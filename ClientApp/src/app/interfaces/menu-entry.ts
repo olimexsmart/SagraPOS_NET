@@ -1,5 +1,5 @@
 export interface MenuEntry {
-    ID: number,
+    id: number,
     name: string,
     price: number,
     categoryID: number

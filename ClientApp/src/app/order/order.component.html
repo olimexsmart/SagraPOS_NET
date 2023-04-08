@@ -1,10 +1,10 @@
 <div class="orderContainer">
   <ng-container *ngFor="let c of categories">
-    <div *ngIf="(catPresent.get(c.ID) ?? 0) > 0" class="receiptCategory mat-elevation-z4">
+    <div *ngIf="(catPresent.get(c.id) ?? 0) > 0" class="receiptCategory mat-elevation-z4">
       <ng-container *ngFor="let m of menu">
         <!-- RECEIPT SECTIONS -->
         <!-- Loop on each MenuEntry and add it if it's the right category -->
-        <div *ngIf="m.categoryID==c.ID && (order.get(m) ?? 0) > 0" (click)="removeEntry(m)" class="receiptLine">
+        <div *ngIf="m.categoryID==c.id && (order.get(m) ?? 0) > 0" (click)="removeEntry(m)" class="receiptLine">
           <span>{{m.name | uppercase}}</span>
           <span>{{order.get(m) ?? 0}}</span>
         </div>

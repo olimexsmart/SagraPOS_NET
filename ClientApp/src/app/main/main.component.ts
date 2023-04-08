@@ -14,7 +14,7 @@ import { MenuService } from '../services/menu.service';
 export class MainComponent {
   mobileQuery: MediaQueryList;
   private mobileQueryListener: () => void;
-  title = 'sagraPOS';
+  title = 'SagraPOS';
   categories: MenuCategories[] = []
   menuEntries: MenuEntry[] = []
 

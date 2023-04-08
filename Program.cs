@@ -7,7 +7,9 @@ internal class Program
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
-        builder.Services.AddControllersWithViews();
+        builder.Services.AddControllers();
+        // TODO field ID gets serialized as "id" and I don't like it (consider switching to newtosoft json)
+        //.AddJsonOptions(opts => opts.JsonSerializerOptions.PropertyNamingPolicy = null);
         builder.Services.AddSqlite<MenuDB>("Data Source=SagraPOS.sqlite3");
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(c =>

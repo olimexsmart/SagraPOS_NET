@@ -15,10 +15,10 @@
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
-            "serverReadyAction": {
-                "action": "openExternally",
-                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
-            },
+            // "serverReadyAction": {
+            //     "action": "openExternally",
+            //     "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            // },
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
@@ -27,12 +27,11 @@
             }
         },
         {
-            "name": "ng serve",
+            "name": "ng serve", // TODO publish di setup on SO
             "type": "msedge",
             "request": "launch",
             "preLaunchTask": "npmStart",
             "url": "http://localhost:4200/",
-            // "cwd": "${workspaceFolder}/ClientApp",
             "webRoot": "${workspaceFolder}/ClientApp"
         }
     ]
