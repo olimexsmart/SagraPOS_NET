@@ -1,0 +1,14 @@
+[Unit]
+Description=SagraPOS service
+After=network.target
+StartLimitIntervalSec=0
+[Service]
+Type=simple
+Restart=always
+RestartSec=10
+User=olli
+WorkingDirectory=/home/olli/bin/Release/net7.0/linux-arm64/publish/
+ExecStart=/home/olli/bin/Release/net7.0/linux-arm64/publish/SagraPOS
+
+[Install]
+WantedBy=multi-user.target

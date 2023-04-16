@@ -28,7 +28,7 @@
               <!-- Loop on each MenuEntry and add it if it's the right category -->
               <mat-card class="mat-elevation-z4 entryCard" matRipple
                 [matRippleAnimation]="{ enterDuration: 500, exitDuration: 1000 }" (click)="order.addEntry(m)">
-                <img mat-card-image class="cardImageStandardize" src="http://localhost:5001/GetImage?id={{m.id}}"
+                <img mat-card-image class="cardImageStandardize" src="{{baseUrl}}GetImage?id={{m.id}}"
                   alt="{{m.name}}">
                 <mat-card-header>
                   <mat-card-title>{{m.name}}</mat-card-title>

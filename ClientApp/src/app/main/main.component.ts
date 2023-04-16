@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Component, ChangeDetectorRef, ViewChild, Inject } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 
 import { MenuEntry } from '../interfaces/menu-entry';
@@ -18,7 +18,9 @@ export class MainComponent {
   categories: MenuCategories[] = []
   menuEntries: MenuEntry[] = []
 
-  constructor(private menuService: MenuService,
+  constructor(
+    @Inject('BASE_URL') public baseUrl: string,
+    private menuService: MenuService,
     changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
