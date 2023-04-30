@@ -6,7 +6,8 @@ public class MenuDB : DbContext
 {
     public MenuDB(DbContextOptions options) : base(options) { }
     // TODO rename tables with uppercase letters
-    public DbSet<MenuCategory> categories { get; set; } = null!;
-    public DbSet<MenuEntry> menuEntries { get; set; } = null!;
-
+    public DbSet<MenuCategory> Categories { get; set; } = null!;
+    public DbSet<MenuEntry> MenuEntries { get; set; } = null!;
+    public DbSet<OrderLog> OrdersLog { get; set; } = null!;
+    public DbSet<OrderLogItem> OrderLogItems { get; set; } = null!;
 }

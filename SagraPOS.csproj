@@ -56,7 +56,7 @@
   <!-- Compress the build output to a single file -->
   <Target Name="OutputZIP" AfterTargets="PublishRunWebPack">
     <Message Importance="high" Text="Starting zipping solution" />
-    <Exec Command="zip -q -r SagraPOS-$(ProcessorArchitecture) $(OutDir)"/>
+    <Exec Command="zip -q -r -1 SagraPOS-$(ProcessorArchitecture) $(OutDir)"/>
     <Message Importance="high" Text="Zipping completed" />
   </Target>
 

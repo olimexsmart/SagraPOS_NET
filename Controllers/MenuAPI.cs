@@ -19,13 +19,13 @@ public class MenuAPI : ControllerBase
     [HttpGet]
     public IEnumerable<MenuCategory> GetCategories()
     {
-        return db.categories;
+        return db.Categories;
     }
 
     [HttpGet]
     public IEnumerable<dynamic> GetEntries()
     {
-        return db.menuEntries.Select(x => new
+        return db.MenuEntries.Select(x => new
         {
             id = x.ID,
             categoryID = x.categoryID,
@@ -37,7 +37,7 @@ public class MenuAPI : ControllerBase
     [HttpGet]
     public ActionResult GetImage([FromQuery] int id)
     {
-        var image = db.menuEntries.Where(x => x.ID == id)
+        var image = db.MenuEntries.Where(x => x.ID == id)
                                   .Select(x => x.image)
                                   .ToArray();
         if (image.Any())

@@ -2,9 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using ESCPOS_NET.Emitters;
 using ESCPOS_NET;
 using ESCPOS_NET.Utilities;
-using ESCPOS_NET.Extensions;
 using SagraPOS.Models;
-using System.Text;
 
 namespace SagraPOS.Controllers;
 
@@ -45,22 +43,51 @@ public class OrderAPI : ControllerBase
     [HttpPost]
     public ActionResult ConfirmOrder([FromBody] IEnumerable<OrderEntryDTO> orderToPrint)
     {
-        return printOrder(orderToPrint).Result;
+        // Compute the total
+        // Update DB
+        // TODO check if rowid is better than explicit ID column
+        // TODO check how to get the ID just inserted
+        // Print only in case of a succesfull transaction
+        ActionResult ar = printOrder(orderToPrint, out float total);
+        if (ar is OkObjectResult)
+        {
+            using var transaction = db.Database.BeginTransaction();
+            OrderLog ol = new()
+            {
+                Total = total,
+                Time = DateTime.Now
+            };
+            db.OrdersLog.Add(ol);
+            db.SaveChanges();
+            foreach (var o in orderToPrint)
+            {
+                db.OrderLogItems.Add(new OrderLogItem
+                {
+                    OrderID = ol.ID,
+                    MenuEntryID = o.EntryID,
+                    Quantity = o.Quantity
+                });
+                db.SaveChanges();
+            }
+            transaction.Commit();
+        }
+
+        return ar;
     }
 
-    private async Task<ActionResult> printOrder(IEnumerable<OrderEntryDTO> orderToPrint)
+    private ActionResult printOrder(IEnumerable<OrderEntryDTO> orderToPrint, out float total)
     {
+        total = 0;
         // Exit immediately if empty
         if (!orderToPrint.Any())
             return BadRequest("Empty order array");
         // Fill these variable getting result from DB
-        float total = 0;
         Dictionary<int, Dictionary<string, int>> printCategories = new();
         bool hasTens = false; // True if some quantity ha 2 digits // TODO set a maximum quantity value
         foreach (var o in orderToPrint)
         {
             // Get MenuEntry object from db
-            MenuEntry? me = db.menuEntries.Where(x => x.ID == o.EntryID)
+            MenuEntry? me = db.MenuEntries.Where(x => x.ID == o.EntryID)
                                          .Select(x => new MenuEntry()
                                          {
                                              categoryID = x.categoryID,
@@ -82,11 +109,13 @@ public class OrderAPI : ControllerBase
             hasTens |= o.Quantity >= 10;
         }
         // Get categories names by ID
-        Dictionary<int, string> categoryNames = db.categories.ToDictionary(k => k.ID, v => v.name);
+        Dictionary<int, string> categoryNames = db.Categories.ToDictionary(k => k.ID, v => v.name);
         // Stop here if in debug mode
         if (debugMode)
         {
-            // Console.WriteLine(printCategories); TODO better debug print
+            foreach(var pc in printCategories)
+                foreach(var pcVal in pc.Value)
+                    logger.LogInformation($"Order printing: MenuEntry={pc.Key} Quantity={pcVal.Value}");
             return Ok(printCategories);
         }
 
@@ -122,7 +151,7 @@ public class OrderAPI : ControllerBase
         e.CodePage(CodePage.PC858_EURO),
         new byte[] { 0xD5 },
         e.CodePage(CodePage.PC437_USA_STANDARD_EUROPE_DEFAULT)));
-        bab.Append(e.PrintLine($"{total, 2:.00}"));
+        bab.Append(e.PrintLine($"{total,2:.00}"));
         // Additional info
         bab.Append(e.CenterAlign());
         bab.Append(e.SetStyles(PrintStyle.Italic | PrintStyle.Bold));
@@ -136,7 +165,7 @@ public class OrderAPI : ControllerBase
 
         try
         {
-            await printer.WriteAsync(bab.ToArray());
+            printer.WriteAsync(bab.ToArray()).Wait();
         }
         catch (TimeoutException)
         {
