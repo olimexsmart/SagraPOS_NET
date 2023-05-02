@@ -28,9 +28,9 @@ public class MenuAPI : ControllerBase
         return db.MenuEntries.Select(x => new
         {
             id = x.ID,
-            categoryID = x.categoryID,
-            name = x.name,
-            price = x.price
+            categoryID = x.CategoryID,
+            name = x.Name,
+            price = x.Price
         });
     }
 
@@ -38,7 +38,7 @@ public class MenuAPI : ControllerBase
     public ActionResult GetImage([FromQuery] int id)
     {
         var image = db.MenuEntries.Where(x => x.ID == id)
-                                  .Select(x => x.image)
+                                  .Select(x => x.Image)
                                   .ToArray();
         if (image.Any())
             return File(image[0] ?? new byte[0], "image/jpeg");

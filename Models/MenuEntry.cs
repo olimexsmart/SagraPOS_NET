@@ -4,9 +4,9 @@ namespace SagraPOS.Models
     public class MenuEntry
     {
         public int ID { get; set; }
-        public int categoryID { get; set; }
-        public string name { get; set; } = null!;
-        public float price { get; set; }
-        public byte[]? image {get; set;}
+        public int CategoryID { get; set; }
+        public string Name { get; set; } = null!;
+        public float Price { get; set; }
+        public byte[]? Image {get; set;}
     }
 }

@@ -28,9 +28,8 @@ public class OrderAPI : ControllerBase
         if (!bool.TryParse(configuration["DebugMode"], out debugMode))
             debugMode = false;
         printerIP = configuration["Printer:IP"] ?? throw new NullReferenceException("Missing printer IP setting");
-        if (!int.TryParse(configuration["Printer:port"]
-                            ?? throw new NullReferenceException("Missing printer port setting"), out printerPort))
-        { throw new FormatException("Printer port setting non parable as int"); }
+        if (!int.TryParse(configuration["Printer:port"], out printerPort))
+            throw new NullReferenceException("Missing printer port setting");
         // Init printer
         printer = new ImmediateNetworkPrinter(new ImmediateNetworkPrinterSettings()
         {
@@ -90,21 +89,21 @@ public class OrderAPI : ControllerBase
             MenuEntry? me = db.MenuEntries.Where(x => x.ID == o.EntryID)
                                          .Select(x => new MenuEntry()
                                          {
-                                             categoryID = x.categoryID,
-                                             name = x.name,
-                                             price = x.price
+                                             CategoryID = x.CategoryID,
+                                             Name = x.Name,
+                                             Price = x.Price
                                          }).FirstOrDefault();
             if (me is null)
                 return NotFound($"MenuEntry with ID {o.EntryID} not found");
             // Add entry to the dictionary
-            if (!printCategories.ContainsKey(me.categoryID))
-                printCategories.Add(me.categoryID, new Dictionary<string, int>());
+            if (!printCategories.ContainsKey(me.CategoryID))
+                printCategories.Add(me.CategoryID, new Dictionary<string, int>());
             // Check if already present
-            if (printCategories[me.categoryID].ContainsKey(me.name))
+            if (printCategories[me.CategoryID].ContainsKey(me.Name))
                 return BadRequest($"Order contains duplicate IDs with value: {o.EntryID}");
-            printCategories[me.categoryID].Add(me.name, o.Quantity);
+            printCategories[me.CategoryID].Add(me.Name, o.Quantity);
             // Update total
-            total += me.price * o.Quantity;
+            total += me.Price * o.Quantity;
             // Update tens presence
             hasTens |= o.Quantity >= 10;
         }
@@ -171,53 +170,6 @@ public class OrderAPI : ControllerBase
         {
             return StatusCode(StatusCodes.Status504GatewayTimeout, "Cannot connect to printer");
         }
-
-        /*await printer.WriteAsync(
-            ByteSplicer.Combine(
-                e.CenterAlign(),
-                // e.PrintImage(File.ReadAllBytes("images/pd-logo-300.png"), true),
-                e.PrintLine(""),
-                e.SetBarcodeHeightInDots(360),
-                e.SetBarWidth(BarWidth.Default),
-                e.SetBarLabelPosition(BarLabelPrintPosition.None),
-                e.PrintBarcode(BarcodeType.ITF, "0123456789"),
-                e.PrintLine(""),
-                e.PrintLine("B&H PHOTO & VIDEO"),
-                e.PrintLine("420 NINTH AVE."),
-                e.PrintLine("NEW YORK, NY 10001"),
-                e.PrintLine("(212) 502-6380 - (800)947-9975"),
-                e.SetStyles(PrintStyle.Underline),
-                e.PrintLine("www.bhphotovideo.com"),
-                e.SetStyles(PrintStyle.None),
-                e.PrintLine(""),
-                e.LeftAlign(),
-                e.PrintLine("Order: 123456789        Date: 02/01/19"),
-                e.PrintLine(""),
-                e.PrintLine(""),
-                e.SetStyles(PrintStyle.FontB),
-                e.PrintLine("1   TRITON LOW-NOISE IN-LINE MICROPHONE PREAMP"),
-                e.PrintLine("    TRFETHEAD/FETHEAD                        89.95         89.95"),
-                e.PrintLine("----------------------------------------------------------------"),
-                e.RightAlign(),
-                e.PrintLine("SUBTOTAL         89.95"),
-                e.PrintLine("Total Order:         89.95"),
-                e.PrintLine("Total Payment:         89.95"),
-                e.PrintLine(""),
-                e.LeftAlign(),
-                e.SetStyles(PrintStyle.Bold | PrintStyle.FontB),
-                e.PrintLine("SOLD TO:                        SHIP TO:"),
-                e.SetStyles(PrintStyle.FontB),
-                e.PrintLine("  FIRSTN LASTNAME                 FIRSTN LASTNAME"),
-                e.PrintLine("  123 FAKE ST.                    123 FAKE ST."),
-                e.PrintLine("  DECATUR, IL 12345               DECATUR, IL 12345"),
-                e.PrintLine("  (123)456-7890                   (123)456-7890"),
-                e.PrintLine("  CUST: 87654321"),
-                e.PrintLine(""),
-                e.PrintLine(""),
-                e.FullCutAfterFeed(1)
-            )
-        );*/
-
         return Ok();
     }
 
