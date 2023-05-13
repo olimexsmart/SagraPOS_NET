@@ -16,32 +16,27 @@
     <app-order #order [categories]="categories" [menu]="menuEntries"></app-order>
   </mat-sidenav>
   <!-- TABS -->
-  <!-- Change for "below" to position tabs at the bottom -->
-  <mat-tab-group headerPosition="above">
+  <mat-tab-group class="makeTabGroupSticky">
     <!-- Add a tab for each category -->
     <mat-tab *ngFor="let c of categories" label="{{c.name}}">
       <div class="content">
-        <div fxLayout="row wrap" fxLayoutGap="16px grid">
           <ng-container *ngFor="let m of menuEntries">
-            <div fxFlex="33%" fxFlex.xs="100%" fxFlex.sm="50%" *ngIf="m.categoryID==c.id">
+            <div *ngIf="m.categoryID==c.id">
               <!-- CARDS -->
               <!-- Loop on each MenuEntry and add it if it's the right category -->
               <mat-card class="mat-elevation-z4 entryCard" matRipple
                 [matRippleAnimation]="{ enterDuration: 500, exitDuration: 1000 }" (click)="order.addEntry(m)">
-                <img mat-card-image class="cardImageStandardize" src="{{baseUrl}}GetImage?id={{m.id}}"
-                  alt="{{m.name}}">
-                <mat-card-header>
-                  <mat-card-title>{{m.name}}</mat-card-title>
+                <img mat-card-image class="cardImageStandardize" src="{{baseUrl}}GetImage?id={{m.id}}" alt="{{m.name}}">
+                <mat-card-header >
+                  <mat-card-title class="cardHead">{{m.name}}</mat-card-title>
                   <span class="example-spacer"></span>
                   <mat-chip-set>
                     <mat-chip>{{m.price}}€</mat-chip>
                   </mat-chip-set>
                 </mat-card-header>
-                <!-- <mat-card-footer>{{m.price}}€</mat-card-footer> -->
               </mat-card>
             </div>
           </ng-container>
-        </div>
       </div>
     </mat-tab>
   </mat-tab-group>

@@ -10,23 +10,25 @@
     height: 90%;
 }
 
-/* .example-sidenav-content {
-    display: flex;
-    height: 100%;
-    align-items: center;
-    justify-content: center;
-} */
-
-/* .example-sidenav {
-    padding: 20px;
-} */
-
 .content {
     padding: 16px;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
 }
 
 .entryCard {
     cursor: pointer;
+    width: 15rem;
+    margin: 10px;
+}
+
+.cardHead {
+    min-height: 64px;
+}
+
+.makeTabGroupSticky {
+    max-height: 100%;
 }
 
 .cardImageStandardize {
@@ -53,5 +55,15 @@
         min-width: 100%;
         top: 56px !important;
     }
-}
 
+    .entryCard {
+        cursor: pointer;
+        width: 10rem;
+        margin: 5px;
+    }
+
+    .cardHead {
+        font-size: medium;
+        min-height: 48px;
+    }
+}

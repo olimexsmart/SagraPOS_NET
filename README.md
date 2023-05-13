@@ -18,3 +18,6 @@ Open Source receipt printing for simple events
 * Better spacing in tablet view (kinda too crammed)
 * Setting view (and then edit) page
 * Product view (and then edit) page
+* All assets (font, icons, ecc) loaded from LAN
+* Date and time should be coming from client
+
