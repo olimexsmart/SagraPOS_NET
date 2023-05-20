@@ -53,18 +53,25 @@
     </ItemGroup>
   </Target>
 
-  <!-- Compress the build output to a single file -->
-  <Target Name="OutputZIP" AfterTargets="PublishRunWebPack">
+  <!-- <Target Name="SuperClean" BeforeTargets="Before">
+    <Message Importance="high" Text="Starting super clean" />
+    <Exec Command="rm -f SagraPOS-$(ProcessorArchitecture).zip"/>
+    <Exec Command="rm -rf bin"/>
+  </Target>
+
+  
+  <Target Name="OutputZIP" AfterTargets="PublishRunWebPack" Condition="'$(ProcessorArchitecture)' == 'arm64'">
     <Message Importance="high" Text="Starting zipping solution" />
+    <Exec Command="rm -f SagraPOS-$(ProcessorArchitecture).zip"/>
     <Exec Command="zip -q -r -1 SagraPOS-$(ProcessorArchitecture) $(OutDir)"/>
     <Message Importance="high" Text="Zipping completed" />
   </Target>
 
 
-  <Target Name="CopyToRPi" AfterTargets="OutputZIP">
+  <Target Name="CopyToRPi" AfterTargets="OutputZIP" Condition="'$(ProcessorArchitecture)' == 'arm64'">
     <Message Importance="high" Text="Starting copy of zip to deply RPi" />
     <Exec Command="scp SagraPOS-$(ProcessorArchitecture).zip olli@192.168.1.5:/home/olli/"/>
     <Message Importance="high" Text="Transfer complete" />
-  </Target>
+  </Target> -->
 
 </Project>

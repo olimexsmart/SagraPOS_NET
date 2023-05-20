@@ -2,7 +2,15 @@
 
 Open Source receipt printing for simple events
 
-## TODOs
+# Build for RaspberryPi 3 or 4
+The default IP is 192.168.1.5, change it in the script.
+Enter three times the password, could be avoided setting an SSH keys.
+The stops the service, uploads all the build files and restarts the service.
+```
+./confFilesBackup/buildUploadRPi.sh 
+```
+
+## To-Be-Done
 - [x] Add shutdown button and light
 - [ ] Manage two or more printers
 - [ ] Info page
@@ -20,5 +28,5 @@ Open Source receipt printing for simple events
 - [ ] Product view (and then edit) page
 - [ ] Date and time should be coming from client
 - [x] All assets (font, icons, ecc) loaded from LAN
-- [ ] Document here build and deploy procedure
+- [x] Document here build and deploy procedure
 

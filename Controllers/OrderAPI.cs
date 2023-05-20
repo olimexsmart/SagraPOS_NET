@@ -46,9 +46,10 @@ public class OrderAPI : ControllerBase
         // Update DB
         // TODO check if rowid is better than explicit ID column
         // TODO check how to get the ID just inserted
+        // TODO use exceptions instead of ActionResult
         // Print only in case of a succesfull transaction
         ActionResult ar = printOrder(orderToPrint, out float total);
-        if (ar is OkObjectResult)
+        if (ar is OkResult || ar is OkObjectResult)
         {
             using var transaction = db.Database.BeginTransaction();
             OrderLog ol = new()
