@@ -1,14 +1,7 @@
-.example-spacer {
+.flexSpacer {
     flex: 1 1 auto;
 }
 
-.example-icon {
-    padding: 0 14px;
-}
-
-.example-container {
-    height: 90%;
-}
 
 .content {
     padding: 16px;

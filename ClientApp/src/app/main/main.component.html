@@ -1,12 +1,15 @@
 <!-- TOOLBAR -->
 <mat-toolbar color="primary">
   <span>{{title}}</span>
-  <span class="example-spacer"></span>
-  <button mat-icon-button class="example-icon" (click)="sidenav.toggle()">
-    <mat-icon>receipt</mat-icon>
-  </button>
-  <button mat-icon-button class="example-icon">
+  <span class="flexSpacer"></span>
+  <button mat-icon-button>
     <mat-icon>settings</mat-icon>
+  </button>
+  <button mat-icon-button routerLink="/info">
+    <mat-icon>info</mat-icon>
+  </button>
+  <button mat-icon-button (click)="sidenav.toggle()">
+    <mat-icon>receipt</mat-icon>
   </button>
 </mat-toolbar>
 <!-- FOOD CARDS -->
@@ -20,23 +23,23 @@
     <!-- Add a tab for each category -->
     <mat-tab *ngFor="let c of categories" label="{{c.name}}">
       <div class="content">
-          <ng-container *ngFor="let m of menuEntries">
-            <div *ngIf="m.categoryID==c.id">
-              <!-- CARDS -->
-              <!-- Loop on each MenuEntry and add it if it's the right category -->
-              <mat-card class="mat-elevation-z4 entryCard" matRipple
-                [matRippleAnimation]="{ enterDuration: 500, exitDuration: 1000 }" (click)="order.addEntry(m)">
-                <img mat-card-image class="cardImageStandardize" src="{{baseUrl}}GetImage?id={{m.id}}" alt="{{m.name}}">
-                <mat-card-header >
-                  <mat-card-title class="cardHead">{{m.name}}</mat-card-title>
-                  <span class="example-spacer"></span>
-                  <mat-chip-set>
-                    <mat-chip>{{m.price}}€</mat-chip>
-                  </mat-chip-set>
-                </mat-card-header>
-              </mat-card>
-            </div>
-          </ng-container>
+        <ng-container *ngFor="let m of menuEntries">
+          <div *ngIf="m.categoryID==c.id">
+            <!-- CARDS -->
+            <!-- Loop on each MenuEntry and add it if it's the right category -->
+            <mat-card class="mat-elevation-z4 entryCard" matRipple
+              [matRippleAnimation]="{ enterDuration: 500, exitDuration: 1000 }" (click)="order.addEntry(m)">
+              <img mat-card-image class="cardImageStandardize" src="{{baseUrl}}GetImage?id={{m.id}}" alt="{{m.name}}">
+              <mat-card-header>
+                <mat-card-title class="cardHead">{{m.name}}</mat-card-title>
+                <span class="flexSpacer"></span>
+                <mat-chip-set>
+                  <mat-chip>{{m.price}}€</mat-chip>
+                </mat-chip-set>
+              </mat-card-header>
+            </mat-card>
+          </div>
+        </ng-container>
       </div>
     </mat-tab>
   </mat-tab-group>

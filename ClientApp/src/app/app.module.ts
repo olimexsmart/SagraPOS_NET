@@ -16,13 +16,16 @@ import { OrderComponent } from './order/order.component';
 import { MatRippleModule } from '@angular/material/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MainComponent } from './main/main.component';
-import {MatGridListModule} from '@angular/material/grid-list';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { InfoComponent } from './info/info.component';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [
     AppComponent,
     OrderComponent,
-    MainComponent
+    MainComponent,
+    InfoComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -30,9 +33,10 @@ import {MatGridListModule} from '@angular/material/grid-list';
     FormsModule,
     RouterModule.forRoot([
       // { path: '', component: HomeComponent, pathMatch: 'full' }, // TODO add 404 page
-      // { path: 'counter', component: CounterComponent },
       { path: '', redirectTo: '/main', pathMatch: 'full' },
-      { path: 'main', component: MainComponent },
+      // TODO animations on page change
+      { path: 'main', component: MainComponent }, //, data: { animation: 'togglePage' } },
+      { path: 'info', component: InfoComponent } //, data: { animation: 'togglePage' } },
       // { path: '**', component: NotFoundComponent },
     ]),
     BrowserModule,
@@ -47,7 +51,8 @@ import {MatGridListModule} from '@angular/material/grid-list';
     FormsModule,
     MatRippleModule,
     HttpClientModule,
-    MatGridListModule
+    MatGridListModule,
+    MatTableModule
   ],
   providers: [],
   bootstrap: [AppComponent]
