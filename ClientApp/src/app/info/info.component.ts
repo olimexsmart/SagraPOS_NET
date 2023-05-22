@@ -27,6 +27,18 @@ export class InfoComponent {
   }
 
   ngOnInit(): void {
+    this.refreshInfo()
+  }
+
+  clearInfo(): void {
+    // TODO insert pin from a dialog
+    // TODO Properly handle network errors
+    this.infoService.resetInfoOrder(1234).subscribe(x => {
+      this.refreshInfo()
+    });
+  }
+
+  private refreshInfo(): void {
     this.infoService.getInfoOrder().subscribe(infoOrders => {
       this.infoOrders = infoOrders
       this.tableDataSource = new MatTableDataSource(this.infoOrders.infoOrderEntries)

@@ -26,7 +26,7 @@ export class MainComponent {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this.mobileQueryListener = () => changeDetectorRef.detectChanges(); // Is this variable necessary?
     this.mobileQuery.addListener(this.mobileQueryListener); // TODO fix this deprecation
-   }
+  }
 
   @ViewChild('sidenav') sidenav!: MatDrawer;
 
@@ -37,7 +37,9 @@ export class MainComponent {
 
   ngAfterViewInit() {
     setTimeout(() => {
-      this.sidenav.open()
+      // Avoid opening if on mobile
+      if (!this.mobileQuery.matches)
+        this.sidenav.open()
     })
   }
 }

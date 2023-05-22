@@ -119,7 +119,7 @@ public class OrderAPI : ControllerBase
             return Ok(printCategories);
         }
 
-        // TODO logo
+        // TODO move all printing to a separate class and inject that dependency
         // Use the vars defined before to printe the receipt
         var e = new EPSON();
         ByteArrayBuilder bab = new();

@@ -42,4 +42,10 @@ export class OrderComponent {
       console.log(res)
     })
   }
+
+  /*
+   * // TODO add outbound event fired on printAndClear
+   * is catched by main component 
+   * and closes the sidebar when on mobile
+   */
 }

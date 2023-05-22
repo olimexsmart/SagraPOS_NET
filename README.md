@@ -13,7 +13,7 @@ The stops the service, uploads all the build files and restarts the service.
 ## To-Be-Done
 - [x] Add shutdown button and light
 - [ ] Manage two or more printers
-- [ ] Info page
+- [x] Info page
 - [ ] Print info 
 - [ ] Reset info
 - [x] DB table with info
@@ -28,5 +28,6 @@ The stops the service, uploads all the build files and restarts the service.
 - [ ] Product view (and then edit) page
 - [ ] Date and time should be coming from client
 - [x] All assets (font, icons, ecc) loaded from LAN
-- [x] Document here build and deploy procedure
+- [ ] Document here build and deploy procedure (detailed)
+- [ ] Move printing to a separate class
 
