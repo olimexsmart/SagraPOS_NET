@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
@@ -19,13 +20,18 @@ import { MainComponent } from './main/main.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { InfoComponent } from './info/info.component';
 import { MatTableModule } from '@angular/material/table';
+import { DialogPinComponent } from './dialog-pin/dialog-pin.component';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import {MatInputModule} from '@angular/material/input';
+import { A11yModule } from '@angular/cdk/a11y'
 
 @NgModule({
   declarations: [
     AppComponent,
     OrderComponent,
     MainComponent,
-    InfoComponent
+    InfoComponent,
+    DialogPinComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -52,7 +58,13 @@ import { MatTableModule } from '@angular/material/table';
     MatRippleModule,
     HttpClientModule,
     MatGridListModule,
-    MatTableModule
+    MatTableModule,
+    MatDialogModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    A11yModule
   ],
   providers: [],
   bootstrap: [AppComponent]
