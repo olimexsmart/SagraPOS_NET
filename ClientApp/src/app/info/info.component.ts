@@ -1,11 +1,11 @@
-import { MatSort, Sort } from '@angular/material/sort';
+import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Component, ViewChild } from '@angular/core';
 import { InfoOrders } from '../interfaces/info-orders';
 import { InfoService } from '../services/info.service';
 import { ConfirmDialogModel, DialogPinComponent } from '../dialog-pin/dialog-pin.component';
 import { MatDialog } from '@angular/material/dialog';
-import { MatFormFieldModule } from "@angular/material/form-field";
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -18,10 +18,12 @@ export class InfoComponent {
   infoOrders: InfoOrders;
   tableDataSource;
   @ViewChild(MatSort) sort: MatSort = null!;
+  printerID: number = 0;
 
   constructor(
     private infoService: InfoService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private route: ActivatedRoute
   ) {
     this.infoOrders = {
       infoOrderEntries: [],
@@ -33,6 +35,9 @@ export class InfoComponent {
 
   ngOnInit(): void {
     this.refreshInfo()
+    this.printerID = parseInt(this.route.snapshot.paramMap.get('printerID') ?? "0")
+    console.log(this.printerID);
+    
   }
 
   clearInfo(): void {

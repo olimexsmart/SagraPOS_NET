@@ -5,7 +5,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -21,9 +20,13 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { InfoComponent } from './info/info.component';
 import { MatTableModule } from '@angular/material/table';
 import { DialogPinComponent } from './dialog-pin/dialog-pin.component';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import {MatInputModule} from '@angular/material/input';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatInputModule } from '@angular/material/input';
 import { A11yModule } from '@angular/cdk/a11y'
+import {MatSelectModule} from '@angular/material/select';
+import {MatMenuModule} from '@angular/material/menu';
+import { PrinterSelectorComponent } from './printer-selector/printer-selector.component';
+
 
 @NgModule({
   declarations: [
@@ -31,7 +34,8 @@ import { A11yModule } from '@angular/cdk/a11y'
     OrderComponent,
     MainComponent,
     InfoComponent,
-    DialogPinComponent
+    DialogPinComponent,
+    PrinterSelectorComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -42,7 +46,7 @@ import { A11yModule } from '@angular/cdk/a11y'
       { path: '', redirectTo: '/main', pathMatch: 'full' },
       // TODO animations on page change
       { path: 'main', component: MainComponent }, //, data: { animation: 'togglePage' } },
-      { path: 'info', component: InfoComponent } //, data: { animation: 'togglePage' } },
+      { path: 'info/:printerID', component: InfoComponent } //, data: { animation: 'togglePage' } },
       // { path: '**', component: NotFoundComponent },
     ]),
     BrowserModule,
@@ -64,7 +68,9 @@ import { A11yModule } from '@angular/cdk/a11y'
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    A11yModule
+    A11yModule,
+    MatSelectModule,
+    MatMenuModule
   ],
   providers: [],
   bootstrap: [AppComponent]

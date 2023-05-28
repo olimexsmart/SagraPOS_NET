@@ -11,11 +11,11 @@ export class MenuService {
 
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) { }
 
-  getCategories(menuID: number): Observable<MenuCategories[]> {
+  getCategories(): Observable<MenuCategories[]> {
     return this.http.get<MenuCategories[]>(this.baseUrl + `GetCategories`)
   }
 
-  getMenuEntries(menuID: number): Observable<MenuEntry[]> {
+  getMenuEntries(): Observable<MenuEntry[]> {
     return this.http.get<MenuEntry[]>(this.baseUrl + `GetEntries`)
   }
 }

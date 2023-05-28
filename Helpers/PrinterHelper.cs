@@ -78,6 +78,7 @@ public class PrinterHelper
         // Stop here if in debug mode
         if (debugMode)
         {
+            logger.LogInformation($"Selected printer: {printerID}");
             logger.LogInformation($"Order total: {total}");
             foreach (var pc in printCategories)
                 foreach (var pcVal in pc.Value)

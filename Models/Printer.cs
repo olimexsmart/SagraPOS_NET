@@ -6,5 +6,6 @@ namespace SagraPOS.Models
         public string Name { get; set; } = null!;
         public string IP { get; set; } = null!;
         public int Port { get; set; }
+        public bool Hidden { get; set; }
     }
 }

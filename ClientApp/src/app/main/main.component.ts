@@ -5,6 +5,7 @@ import { MenuEntry } from '../interfaces/menu-entry';
 import { MenuCategories } from '../interfaces/menu-categories';
 import { MatDrawer } from '@angular/material/sidenav';
 import { MenuService } from '../services/menu.service';
+import { Printer } from '../interfaces/printer';
 
 @Component({
   selector: 'app-main',
@@ -17,6 +18,7 @@ export class MainComponent {
   title = 'SagraPOS';
   categories: MenuCategories[] = []
   menuEntries: MenuEntry[] = []
+  selectedPrinter: Printer = null!;
 
   constructor(
     @Inject('BASE_URL') public baseUrl: string,
@@ -31,8 +33,8 @@ export class MainComponent {
   @ViewChild('sidenav') sidenav!: MatDrawer;
 
   ngOnInit(): void {
-    this.menuService.getCategories(1).subscribe(categories => this.categories = categories)
-    this.menuService.getMenuEntries(1).subscribe(menuEntries => this.menuEntries = menuEntries)
+    this.menuService.getCategories().subscribe(categories => this.categories = categories)
+    this.menuService.getMenuEntries().subscribe(menuEntries => this.menuEntries = menuEntries)
   }
 
   ngAfterViewInit() {

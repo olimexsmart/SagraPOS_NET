@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { MenuEntry } from '../interfaces/menu-entry';
 import { MenuCategories } from '../interfaces/menu-categories';
 import { OrderService } from '../services/order.service';
+import { Printer } from '../interfaces/printer';
 
 @Component({
   selector: 'app-order',
@@ -10,6 +11,7 @@ import { OrderService } from '../services/order.service';
 })
 export class OrderComponent {
 
+  @Input() selectedPrinter: Printer = null!
   @Input() categories: MenuCategories[] = [];
   @Input() menu: MenuEntry[] = [];
 
@@ -35,7 +37,7 @@ export class OrderComponent {
   }
 
   printAndClear(): void {
-    this.orderService.postPrintOrder(this.order, this.total).subscribe(res => {
+    this.orderService.postPrintOrder(this.selectedPrinter.id, this.order  ).subscribe(res => {
       this.order.clear()
       this.catPresent.clear()
       this.total = 0
