@@ -1,4 +1,5 @@
 using Microsoft.OpenApi.Models;
+using SagraPOS.Helpers;
 using SagraPOS.Models;
 internal class Program
 {
@@ -11,6 +12,8 @@ internal class Program
         // TODO field ID gets serialized as "id" and I don't like it (consider switching to newtosoft json)
         //.AddJsonOptions(opts => opts.JsonSerializerOptions.PropertyNamingPolicy = null);
         builder.Services.AddSqlite<MenuDB>("Data Source=SagraPOS.sqlite3");
+        builder.Services.AddScoped<SettingsHelper>();
+        builder.Services.AddScoped<PrinterHelper>();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(c =>
         {

@@ -10,6 +10,7 @@ export class OrderService {
 
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) { }
 
+  // TODO get printer ID from a dropdown component
   postPrintOrder(order : Map<MenuEntry, number>, total :  number) : Observable<boolean> {
     let plainOrder: OrderEntryDTO[] = []
     for(const [key, value] of order) {
@@ -19,7 +20,7 @@ export class OrderService {
       })
     }
     console.log(plainOrder)
-    return this.http.post<boolean>(this.baseUrl + 'ConfirmOrder', plainOrder)
+    return this.http.post<boolean>(this.baseUrl + 'ConfirmOrder?printerID=4', plainOrder)
   }
 }
 
