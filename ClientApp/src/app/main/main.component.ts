@@ -5,7 +5,7 @@ import { MenuEntry } from '../interfaces/menu-entry';
 import { MenuCategories } from '../interfaces/menu-categories';
 import { MatDrawer } from '@angular/material/sidenav';
 import { MenuService } from '../services/menu.service';
-import { Printer } from '../interfaces/printer';
+import { InitEmptyPrinter, Printer } from '../interfaces/printer';
 
 @Component({
   selector: 'app-main',
@@ -18,7 +18,7 @@ export class MainComponent {
   title = 'SagraPOS';
   categories: MenuCategories[] = []
   menuEntries: MenuEntry[] = []
-  selectedPrinter: Printer = null!;
+  selectedPrinter: Printer = InitEmptyPrinter();
 
   constructor(
     @Inject('BASE_URL') public baseUrl: string,

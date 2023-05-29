@@ -37,7 +37,6 @@ export class InfoComponent {
     this.refreshInfo()
     this.printerID = parseInt(this.route.snapshot.paramMap.get('printerID') ?? "0")
     console.log(this.printerID);
-    
   }
 
   clearInfo(): void {

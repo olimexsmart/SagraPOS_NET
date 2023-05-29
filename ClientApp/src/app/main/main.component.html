@@ -6,7 +6,7 @@
   <button mat-icon-button>
     <mat-icon>settings</mat-icon>
   </button>
-  <button mat-icon-button routerLink="[/info, {{selectedPrinter.id}}]">
+  <button mat-icon-button [routerLink]="['/info', selectedPrinter.id]">
     <mat-icon>info</mat-icon>
   </button>
   <button mat-icon-button (click)="sidenav.toggle()">

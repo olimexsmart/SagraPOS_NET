@@ -19,8 +19,7 @@
     </div>
   </div>
 
-  <button color="primary" *ngIf="order.size > 0" 
-    class="fabStyle" (click)="printAndClear()" mat-fab extended>
+  <button color="accent" *ngIf="order.size > 0" class="fabStyle" (click)="printAndClear()" mat-fab extended>
     <mat-icon>print</mat-icon>
     Conferma ordine
   </button>

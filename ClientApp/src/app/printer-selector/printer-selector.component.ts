@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Inject, Input, Output } from '@angular/core';
 import { SettingsService } from '../services/settings.service';
-import { Printer } from '../interfaces/printer';
+import { InitEmptyPrinter, Printer } from '../interfaces/printer';
 
 @Component({
   selector: 'app-printer-selector',
@@ -10,7 +10,7 @@ import { Printer } from '../interfaces/printer';
 export class PrinterSelectorComponent {
   printers: Printer[] = []
 
-  @Input()  selectedPrinter: Printer = null!
+  @Input() selectedPrinter: Printer = InitEmptyPrinter()
   @Output() selectedPrinterChange = new EventEmitter<Printer>();
 
   constructor(
@@ -19,15 +19,18 @@ export class PrinterSelectorComponent {
   ) { }
 
   ngOnInit(): void {
-    this.settingService.getPrinters().subscribe(printers => 
-      {
-        this.printers = printers
-        this.selectedPrinter = printers[0]
-      })
+    this.settingService.getPrinters().subscribe(printers => {
+      this.printers = printers
+      this.selectedPrinter = printers[0]
+    })
   }
 
   changeSelectedPrinter(p: Printer): void {
     this.selectedPrinter = p
     this.selectedPrinterChange.emit(p)
+  }
+
+  getSelectedPrinter(): Printer {
+    return this.selectedPrinter;
   }
 }

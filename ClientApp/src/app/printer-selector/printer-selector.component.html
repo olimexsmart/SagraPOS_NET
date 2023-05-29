@@ -1,7 +1,8 @@
 <button mat-raised-button color="accent" [matMenuTriggerFor]="menu">
     <mat-icon>print_connect</mat-icon>
-    {{selectedPrinter === null ? 'ND' : selectedPrinter.name}}
+    {{selectedPrinter.name}}
 </button>
 <mat-menu #menu="matMenu" xPosition="before" yPosition="below">
+    <!-- TODO do not display if hidden==true -->
     <button *ngFor="let p of printers;" mat-menu-item (click)="changeSelectedPrinter(p)">{{p.name}}</button>
 </mat-menu>
