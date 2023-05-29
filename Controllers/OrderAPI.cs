@@ -16,7 +16,6 @@ public class OrderAPI : ControllerBase
     private readonly PrinterHelper printerService;
     private readonly bool debugMode;
 
-
     public OrderAPI(ILogger<OrderAPI> logger,
                     IConfiguration configuration,
                     MenuDB db,
@@ -38,14 +37,10 @@ public class OrderAPI : ControllerBase
         [FromQuery] int printerID,
         [FromBody] IEnumerable<OrderEntryDTO> orderToPrint)
     {
-        // Compute the total
-        // Update DB
-        // TODO check if rowid is better than explicit ID column
-        // TODO check how to get the ID just inserted
-        // TODO use exceptions instead of ActionResult
+        // Compute the total while preparing the printing data structure
         // Print only in case of a succesfull transaction
         printerService.PrintOrder(printerID, orderToPrint, out float total);
-
+        // Update DB order logs
         using var transaction = db.Database.BeginTransaction();
         OrderLog ol = new()
         {
@@ -65,7 +60,6 @@ public class OrderAPI : ControllerBase
             db.SaveChanges();
         }
         transaction.Commit();
-
         return Ok();
     }
 }

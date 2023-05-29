@@ -40,7 +40,7 @@ export class InfoComponent {
   }
 
   clearInfo(): void {
-    // TODO insert pin from a dialog
+    // TODO read pin from settings
     // TODO Properly handle network errors
     const message = 'Tutti i dati andranno persi';
     const dialogData = new ConfirmDialogModel('Azzera info?', message);
