@@ -3,6 +3,7 @@
     {{selectedPrinter.name}}
 </button>
 <mat-menu #menu="matMenu" xPosition="before" yPosition="below">
-    <!-- TODO do not display if hidden==true -->
-    <button *ngFor="let p of printers;" mat-menu-item (click)="changeSelectedPrinter(p)">{{p.name}}</button>
+    <ng-container *ngFor="let p of printers;">
+        <button *ngIf="!p.hidden"  mat-menu-item (click)="changeSelectedPrinter(p)">{{p.name}}</button>
+    </ng-container>
 </mat-menu>

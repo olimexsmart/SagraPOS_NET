@@ -18,7 +18,6 @@ export class MainComponent {
   title = 'SagraPOS';
   categories: MenuCategories[] = []
   menuEntries: MenuEntry[] = []
-  selectedPrinter: Printer = InitEmptyPrinter();
 
   constructor(
     @Inject('BASE_URL') public baseUrl: string,
