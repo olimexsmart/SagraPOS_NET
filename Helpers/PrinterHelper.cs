@@ -9,7 +9,7 @@ public class PrinterHelper
 {
     private readonly ILogger<PrinterHelper> logger;
     private readonly IConfiguration configuration;
-    private readonly MenuDB db;
+    private readonly MenuDB db; // TODO remove this dependency
     private readonly SettingsHelper sh;
     private readonly IEnumerable<Printer> printersDB;
     private readonly Dictionary<int, ImmediateNetworkPrinter> printersESC;
@@ -131,6 +131,34 @@ public class PrinterHelper
         bab.Append(e.PrintLine("github.com/olimexsmart/sagraPOS"));
         bab.Append(e.FullCutAfterFeed(3));
         // Confirm printing
+        printersESC[printerID].WriteAsync(bab.ToArray()).Wait();
+    }
+
+    public void PrintInfo(int printerID, InfoOrdersDTO info)
+    {
+        if (debugMode)
+            logger.LogInformation($"Printing info on {printerID}");
+        var e = new EPSON();
+        ByteArrayBuilder bab = new();
+        // Preamble with general info
+        bab.Append(e.PrintLine($"Totale ordini: {info.NumOrders}"));
+        bab.Append(e.PrintLine($"Totale ricavi: {info.OrdersTotal}"));
+        // Loop on each item
+        foreach (var item in info.InfoOrderEntries)
+        {
+            bab.Append(e.SetStyles(PrintStyle.Bold));
+            bab.Append(e.CenterAlign());
+            bab.Append(e.PrintLine(""));
+            bab.Append(e.PrintLine(item.MenuEntryName));
+            bab.Append(e.LeftAlign());
+            bab.Append(e.SetStyles(PrintStyle.None));
+            bab.Append(e.PrintLine($"Vendute: {item.QuantitySold}"));
+            bab.Append(e.PrintLine($"Percentuale vendite: {item.TotalSoldPercentage * 100:.00}%"));
+            bab.Append(e.PrintLine($"Ricavi: {item.TotalSold}"));
+            bab.Append(e.PrintLine($"Percentuale ricavi: {item.TotalPercentage * 100:.00}%"));
+        }
+        // Confirm printing
+        bab.Append(e.FullCutAfterFeed(3));
         printersESC[printerID].WriteAsync(bab.ToArray()).Wait();
     }
 
