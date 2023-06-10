@@ -36,7 +36,6 @@ export class InfoComponent {
   ngOnInit(): void {
     this.refreshInfo()
     this.printerID = parseInt(this.route.snapshot.paramMap.get('printerID') ?? "0")
-    console.log(this.printerID);
   }
 
   clearInfo(): void {
@@ -57,6 +56,14 @@ export class InfoComponent {
           error: console.error // TODO snackbar with success/fail
         });
     });
+  }
+
+  printInfo() : void {
+    this.infoService.printInfo(this.printerID).subscribe(
+      {
+        complete: console.log, // Love to know this hack by myself
+        error: console.error // TODO snackbar with success/fail
+      });
   }
 
   private refreshInfo(): void {

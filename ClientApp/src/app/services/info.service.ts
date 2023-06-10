@@ -17,4 +17,8 @@ export class InfoService {
   resetInfoOrder(pin: number): Observable<any> {
    return this.http.delete(this.baseUrl + `ResetInfoOrders?pin=${pin}`)
   }
+
+  printInfo(printerID: number): Observable<any> {
+    return this.http.get(this.baseUrl + `PrintInfo?printerID=${printerID}`)
+  }
 }
