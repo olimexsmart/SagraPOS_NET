@@ -103,23 +103,21 @@ public class PrinterHelper
             // Body with the ordered entries
             bab.Append(e.LeftAlign());
             bab.Append(e.SetStyles(PrintStyle.Bold));
-            bab.Append(PrinterSetDimensions(3, 1));
+            bab.Append(PrinterSetDimensions(2, 1));
             foreach (var entry in category.Value)
             {
                 if (hasTens)
-                    bab.Append(e.PrintLine($"{entry.Key.ToUpper(),-18}x{entry.Value,2}"));
+                    bab.Append(e.PrintLine($"{entry.Key.ToUpper(),-20}x{entry.Value,2}"));
                 else
-                    bab.Append(e.PrintLine($"{entry.Key.ToUpper(),-19}x{entry.Value,1}"));
+                    bab.Append(e.PrintLine($"{entry.Key.ToUpper(),-21}x{entry.Value,1}"));
             }
             bab.Append(e.FullCutAfterFeed(3));
         }
         // Order total
-        bab.Append(e.Print($"TOTALE:         "));
-        bab.Append(ByteSplicer.Combine(
-        e.CodePage(CodePage.PC858_EURO),
-        new byte[] { 0xD5 },
-        e.CodePage(CodePage.PC437_USA_STANDARD_EUROPE_DEFAULT)));
-        bab.Append(e.PrintLine($"{total,2:.00}"));
+        bab.Append(PrinterSetDimensions(3, 2));
+        bab.Append(e.Print($"TOTALE:".PadRight(9)));
+        bab.Append(PrintEuro(e));
+        bab.Append(e.PrintLine($"{total:.00}"));
         // Additional info
         bab.Append(e.CenterAlign());
         bab.Append(e.SetStyles(PrintStyle.Italic | PrintStyle.Bold));
@@ -128,7 +126,7 @@ public class PrinterHelper
         bab.Append(e.PrintImage(System.IO.File.ReadAllBytes("logo.jpg"), true, isLegacy: true, maxWidth: 350));
         bab.Append(e.SetStyles(PrintStyle.None));
         bab.Append(e.PrintLine(""));
-        bab.Append(e.PrintLine("github.com/olimexsmart/sagraPOS"));
+        bab.Append(e.PrintLine("github.com/olimexsmart/SagraPOS"));
         bab.Append(e.FullCutAfterFeed(3));
         // Confirm printing
         printersESC[printerID].WriteAsync(bab.ToArray()).Wait();
@@ -141,21 +139,27 @@ public class PrinterHelper
         var e = new EPSON();
         ByteArrayBuilder bab = new();
         // Preamble with general info
+        bab.Append(e.SetStyles(PrintStyle.Bold));
+        bab.Append(e.CenterAlign());
         bab.Append(e.PrintLine($"Totale ordini: {info.NumOrders}"));
-        bab.Append(e.PrintLine($"Totale ricavi: {info.OrdersTotal}"));
+        bab.Append(e.Print($"Totale ricavi: "));
+        bab.Append(PrintEuro(e));
+        bab.Append(e.PrintLine($"{info.OrdersTotal:0.00}"));
         // Loop on each item
         foreach (var item in info.InfoOrderEntries)
         {
             bab.Append(e.SetStyles(PrintStyle.Bold));
             bab.Append(e.CenterAlign());
             bab.Append(e.PrintLine(""));
-            bab.Append(e.PrintLine(item.MenuEntryName));
+            bab.Append(e.PrintLine(item.MenuEntryName.ToUpper()));
             bab.Append(e.LeftAlign());
             bab.Append(e.SetStyles(PrintStyle.None));
             bab.Append(e.PrintLine($"Vendute: {item.QuantitySold}"));
-            bab.Append(e.PrintLine($"Percentuale vendite: {item.TotalSoldPercentage * 100:.00}%"));
-            bab.Append(e.PrintLine($"Ricavi: {item.TotalSold}"));
-            bab.Append(e.PrintLine($"Percentuale ricavi: {item.TotalPercentage * 100:.00}%"));
+            bab.Append(e.PrintLine($"Percentuale vendite: {item.TotalSoldPercentage * 100:0.0}%"));
+            bab.Append(e.Print("Ricavi: "));
+            bab.Append(PrintEuro(e));
+            bab.Append(e.PrintLine($"{item.TotalSold:0.00}"));
+            bab.Append(e.PrintLine($"Percentuale ricavi: {item.TotalPercentage * 100:0.0}%"));
         }
         // Confirm printing
         bab.Append(e.FullCutAfterFeed(3));
@@ -167,5 +171,13 @@ public class PrinterHelper
         if (heigth > 7) heigth = 7;
         if (width > 7) width = 7;
         return new byte[] { 0x1D, 0x21, (byte)((width << 4) + heigth) };
+    }
+
+    private byte[] PrintEuro(EPSON e)
+    {
+        return ByteSplicer.Combine(
+        e.CodePage(CodePage.PC858_EURO),
+        new byte[] { 0xD5 },
+        e.CodePage(CodePage.PC437_USA_STANDARD_EUROPE_DEFAULT));
     }
 }
