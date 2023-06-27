@@ -33,9 +33,8 @@ public class OrderAPI : ControllerBase
     }
 
     [HttpPost]
-    public ActionResult ConfirmOrder(
-        [FromQuery] int printerID,
-        [FromBody] IEnumerable<OrderEntryDTO> orderToPrint)
+    public ActionResult ConfirmOrder([FromQuery] int printerID,
+                                     [FromBody] IEnumerable<OrderEntryDTO> orderToPrint)
     {
         // Compute the total while preparing the printing data structure
         // Print only in case of a succesfull transaction
@@ -51,12 +50,17 @@ public class OrderAPI : ControllerBase
         db.SaveChanges();
         foreach (var o in orderToPrint)
         {
+            // Insert log item for this menu entry
             db.OrderLogItems.Add(new OrderLogItem
             {
                 OrderID = ol.ID,
                 MenuEntryID = o.EntryID,
                 Quantity = o.Quantity
             });
+            db.SaveChanges();
+            // Update quantity in menu entry
+            MenuEntry m = db.MenuEntries.Single(m => m.ID == o.EntryID);
+            m.Inventory -= o.Quantity;
             db.SaveChanges();
         }
         transaction.Commit();

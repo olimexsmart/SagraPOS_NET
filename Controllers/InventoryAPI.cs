@@ -5,15 +5,15 @@ namespace SagraPOS.Controllers;
 
 [ApiController]
 [Route("[action]")]
-public class QuantityAPI : ControllerBase
+public class InventoryAPI : ControllerBase
 {
-    private readonly ILogger<QuantityAPI> logger;
+    private readonly ILogger<InventoryAPI> logger;
     private readonly IConfiguration configuration;
     private readonly MenuDB db;
 
-    public QuantityAPI(ILogger<QuantityAPI> logger,
-                      IConfiguration configuration,
-                      MenuDB db)
+    public InventoryAPI(ILogger<InventoryAPI> logger,
+                       IConfiguration configuration,
+                       MenuDB db)
     {
         this.logger = logger;
         this.db = db;
@@ -21,15 +21,14 @@ public class QuantityAPI : ControllerBase
     }
 
     [HttpGet]
-    public Dictionary<int, int> GetQuantities() => db.MenuEntries.ToDictionary(k => k.ID, v => v.Quantity);
+    public Dictionary<int, int> GetQuantities() => db.MenuEntries.ToDictionary(k => k.ID, v => v.Inventory);
 
     [HttpPut]
     public ActionResult SetQuantity([FromQuery] int entryID, [FromQuery] int quantity)
     {
-        logger.LogError($"entri id: {entryID}");
         MenuEntry? m = db.MenuEntries.SingleOrDefault(m => m.ID == entryID);
         if (m is null) return NotFound($"Menu entry with ID {entryID} not found");
-        m.Quantity = quantity;
+        m.Inventory = quantity;
         db.SaveChanges();
         return Ok();
     }
