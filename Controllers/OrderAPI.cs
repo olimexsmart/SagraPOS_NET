@@ -45,7 +45,7 @@ public class OrderAPI : ControllerBase
         OrderLog ol = new()
         {
             Total = total,
-            Time = DateTime.Now
+            Time = DateTime.Now // TODO get time from client, server time not correct
         };
         db.OrdersLog.Add(ol);
         db.SaveChanges();
