@@ -26,7 +26,7 @@ import { A11yModule } from '@angular/cdk/a11y'
 import {MatSelectModule} from '@angular/material/select';
 import {MatMenuModule} from '@angular/material/menu';
 import { PrinterSelectorComponent } from './printer-selector/printer-selector.component';
-
+import {MatBadgeModule} from '@angular/material/badge';
 
 @NgModule({
   declarations: [
@@ -41,6 +41,7 @@ import { PrinterSelectorComponent } from './printer-selector/printer-selector.co
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
+    MatBadgeModule,
     RouterModule.forRoot([
       // { path: '', component: HomeComponent, pathMatch: 'full' }, // TODO add 404 page
       { path: '', redirectTo: '/main', pathMatch: 'full' },

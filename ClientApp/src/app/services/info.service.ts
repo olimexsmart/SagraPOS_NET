@@ -7,9 +7,9 @@ import { InfoOrders } from '../interfaces/info-orders';
   providedIn: 'root'
 })
 export class InfoService {
-  
+
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) { }
-  
+
   getInfoOrder(): Observable<InfoOrders> {
     return this.http.get<InfoOrders>(this.baseUrl + `GetInfoOrders`)
   }

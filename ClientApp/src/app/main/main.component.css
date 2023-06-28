@@ -38,6 +38,20 @@
     min-width: 25%;
 }
 
+.mat-badge-content
+{
+  width: auto;
+    display: grid;
+    min-width: 22px;
+    min-height: 18px;
+    text-align: center;
+    align-items: center;
+    padding: 3px;
+    margin-bottom: .5em;
+    margin-right: .5em;
+}
+
+
 @media(max-width: 599px) {
     .sidenav-container {
         top: 56px !important;

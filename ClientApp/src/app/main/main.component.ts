@@ -1,3 +1,5 @@
+import { InventoryService } from '../services/inventory.service';
+import { Inventory } from './../interfaces/inventory';
 import { Component, ChangeDetectorRef, ViewChild, Inject } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 
@@ -18,12 +20,16 @@ export class MainComponent {
   title = 'SagraPOS';
   categories: MenuCategories[] = []
   menuEntries: MenuEntry[] = []
+   badgeCount :  Inventory[] = []; //TODO dictionary o right type
+  //badgeCount :number; //dictionary o right type
 
   constructor(
     @Inject('BASE_URL') public baseUrl: string,
     private menuService: MenuService,
+    public inventoryService:InventoryService,
     changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher) {
+      // this.badgeCount = 1;
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this.mobileQueryListener = () => changeDetectorRef.detectChanges(); // Is this variable necessary?
     this.mobileQuery.addListener(this.mobileQueryListener); // TODO fix this deprecation
@@ -34,6 +40,18 @@ export class MainComponent {
   ngOnInit(): void {
     this.menuService.getCategories().subscribe(categories => this.categories = categories)
     this.menuService.getMenuEntries().subscribe(menuEntries => this.menuEntries = menuEntries)
+    this.inventoryService.getQuantities().subscribe(badgeCount =>
+      {
+        this.badgeCount = badgeCount
+        console.log(this.badgeCount[1])
+      })
+    setInterval(() => {
+      this.inventoryService.getQuantities().subscribe(badgeCount =>
+        {
+          this.badgeCount = badgeCount
+          console.log(this.badgeCount[3])
+        })
+      }, 5000);
   }
 
   ngAfterViewInit() {
