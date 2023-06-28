@@ -19,6 +19,8 @@ export class DialogPinComponent {
     this.message = data.message;
   }
 
+  // TODO add confirm on enter key press
+
   onConfirm(): void {
     // Close the dialog, return true
     this.dialogRef.close(this.form.controls["PIN"]);

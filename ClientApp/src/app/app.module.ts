@@ -23,10 +23,14 @@ import { DialogPinComponent } from './dialog-pin/dialog-pin.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { A11yModule } from '@angular/cdk/a11y'
-import {MatSelectModule} from '@angular/material/select';
-import {MatMenuModule} from '@angular/material/menu';
+import { MatSelectModule } from '@angular/material/select';
+import { MatMenuModule } from '@angular/material/menu';
 import { PrinterSelectorComponent } from './printer-selector/printer-selector.component';
-import {MatBadgeModule} from '@angular/material/badge';
+import { MatBadgeModule } from '@angular/material/badge';
+import { InventoryModeComponent } from './inventory-mode/inventory-mode.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { DialogUpdateInventoryComponent } from './dialog-update-inventory/dialog-update-inventory.component'
+
 
 @NgModule({
   declarations: [
@@ -35,7 +39,9 @@ import {MatBadgeModule} from '@angular/material/badge';
     MainComponent,
     InfoComponent,
     DialogPinComponent,
-    PrinterSelectorComponent
+    PrinterSelectorComponent,
+    InventoryModeComponent,
+    DialogUpdateInventoryComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -71,7 +77,8 @@ import {MatBadgeModule} from '@angular/material/badge';
     MatInputModule,
     A11yModule,
     MatSelectModule,
-    MatMenuModule
+    MatMenuModule,
+    MatSlideToggleModule
   ],
   providers: [],
   bootstrap: [AppComponent]
