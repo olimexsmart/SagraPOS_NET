@@ -35,9 +35,17 @@ public class InfoAPI : ControllerBase
         if (adminPin != pin)
             return Unauthorized("Wrong administrator pin");
 
-        // Drop order table and will cascade to items
-        db.OrdersLog.RemoveRange(db.OrdersLog);
+        using var transaction = db.Database.BeginTransaction();
+        // Invalidate all Log Items
+        var logItems = db.OrderLogItems.Where(x => x.Valid);
+        foreach (var logItem in logItems)
+            logItem.Valid = false;
+        var logs = db.OrdersLog.Where(x => x.Valid);
+        foreach (var log in logs)
+            log.Valid = false;
+        // Invalida all Logs
         db.SaveChanges();
+        transaction.Commit();
         return Ok();
     }
 
@@ -52,11 +60,11 @@ public class InfoAPI : ControllerBase
     {
         InfoOrdersDTO iod = new();
         // Complete money total
-        iod.OrdersTotal = db.OrdersLog.Sum(x => x.Total);
+        iod.OrdersTotal = db.OrdersLog.Where(x => x.Valid).Sum(x => x.Total);
         // Total orders
-        iod.NumOrders = db.OrdersLog.Count();
+        iod.NumOrders = db.OrdersLog.Where(x => x.Valid).Count();
         // Total number of items ordered
-        int totalItems = db.OrderLogItems.Sum(x => x.Quantity);
+        int totalItems = db.OrderLogItems.Where(x => x.Valid).Sum(x => x.Quantity);
         if (totalItems != 0)
         {
             // Get menu entries and loop on them
@@ -66,7 +74,7 @@ public class InfoAPI : ControllerBase
                 InfoOrdersDTO.InfoOrderEntry ioe = new();
                 ioe.MenuEntryName = me.Name;
                 ioe.QuantitySold = db.OrderLogItems
-                                     .Where(x => x.MenuEntryID == me.ID)
+                                     .Where(x => x.MenuEntryID == me.ID && x.Valid)
                                      .Sum(x => x.Quantity);
                 ioe.TotalSold = ioe.QuantitySold * me.Price;
                 ioe.TotalPercentage = ((float)ioe.QuantitySold) / totalItems;

@@ -34,6 +34,7 @@ public class OrderAPI : ControllerBase
 
     [HttpPost]
     public ActionResult ConfirmOrder([FromQuery] int printerID,
+                                     [FromQuery] DateTime now,
                                      [FromBody] IEnumerable<OrderEntryDTO> orderToPrint)
     {
         // Compute the total while preparing the printing data structure
@@ -44,7 +45,8 @@ public class OrderAPI : ControllerBase
         OrderLog ol = new()
         {
             Total = total,
-            Time = DateTime.Now // TODO get time from client, server time not correct
+            Time = now, // Server time assumed to be wrong
+            Valid = true
         };
         db.OrdersLog.Add(ol);
         db.SaveChanges();
@@ -55,7 +57,8 @@ public class OrderAPI : ControllerBase
             {
                 OrderID = ol.ID,
                 MenuEntryID = o.EntryID,
-                Quantity = o.Quantity
+                Quantity = o.Quantity,
+                Valid = true
             });
             db.SaveChanges();
             // Update quantity in menu entry

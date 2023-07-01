@@ -8,5 +8,6 @@ namespace SagraPOS.Models
         public int OrderID { get; set; }
         public int MenuEntryID { get; set; }
         public int Quantity { get; set; }
+        public bool Valid { get; set; }
     }
 }

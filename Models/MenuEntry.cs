@@ -8,6 +8,6 @@ namespace SagraPOS.Models
         public string Name { get; set; } = null!;
         public float Price { get; set; }
         public byte[]? Image { get; set; }
-        public int Inventory { get; set; }
+        public int? Inventory { get; set; }
     }
 }

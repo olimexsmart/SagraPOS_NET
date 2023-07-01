@@ -19,7 +19,8 @@ export class OrderService {
       })
     }
     console.log(plainOrder)
-    return this.http.post<boolean>(this.baseUrl + `ConfirmOrder?printerID=${printerID}`, plainOrder)
+    // Sending also time because server is assumed to not have accurate time info
+    return this.http.post<boolean>(this.baseUrl + `ConfirmOrder?printerID=${printerID}&now=${new Date().toLocaleString()}`, plainOrder)
   }
 }
 

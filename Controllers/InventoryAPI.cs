@@ -21,7 +21,7 @@ public class InventoryAPI : ControllerBase
     }
 
     [HttpGet]
-    public Dictionary<int, int> GetQuantities() => db.MenuEntries.ToDictionary(k => k.ID, v => v.Inventory);
+    public Dictionary<int, int?> GetQuantities() => db.MenuEntries.ToDictionary(k => k.ID, v => v.Inventory);
 
     [HttpPut]
     public ActionResult SetQuantity([FromQuery] int entryID, [FromQuery] int quantity)
