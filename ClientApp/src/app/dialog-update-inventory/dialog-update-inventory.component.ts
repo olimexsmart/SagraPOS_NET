@@ -2,6 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ConfirmDialogModel } from '../dialog-pin/dialog-pin.component';
+import { InventoryService } from '../services/inventory.service';
 
 @Component({
   selector: 'app-dialog-update-inventory',
@@ -14,16 +15,26 @@ export class DialogUpdateInventoryComponent {
   });
 
   constructor(public dialogRef: MatDialogRef<DialogUpdateInventoryComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: ConfirmDialogModel) {
+    @Inject(MAT_DIALOG_DATA) public data: UpdateInventoryDialogModel,
+    private inventoryService: InventoryService) {
   }
 
   onConfirm(): void {
-    // Close the dialog, return true
-    this.dialogRef.close(this.form.controls["newQuantity"]);
+    this.inventoryService.setQuantity(this.data.pin, this.data.entryID, this.form.controls["newQuantity"].value).subscribe(res => {
+      // TODO errors
+      // Close the dialog, return true
+      this.dialogRef.close();
+    })
   }
 
   onDismiss(): void {
     // Close the dialog, return undefined
     this.dialogRef.close()
+  }
+}
+
+export class UpdateInventoryDialogModel {
+  constructor(public pin: number, public entryID: number) {
+    // TODO pre-filled title with EntryName+old value
   }
 }

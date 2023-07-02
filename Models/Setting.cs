@@ -10,5 +10,6 @@ namespace SagraPOS.Models
         public string? ValueString { get; set; } = null!;
         public float? ValueNum { get; set; }
         public byte[]? ValueBlob { get; set; }
+        public int? ValueInt { get; set; }
     }
 }

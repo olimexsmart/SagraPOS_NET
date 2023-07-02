@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { SettingsService } from '../services/settings.service';
 
 @Component({
   selector: 'app-dialog-pin',
@@ -14,16 +15,22 @@ export class DialogPinComponent {
   title: string;
   message: string;
   constructor(public dialogRef: MatDialogRef<DialogPinComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: ConfirmDialogModel) {
+    @Inject(MAT_DIALOG_DATA) public data: ConfirmDialogModel,
+    private settingService: SettingsService) {
     this.title = data.title;
     this.message = data.message;
   }
 
-  // TODO add confirm on enter key press
-
   onConfirm(): void {
-    // Close the dialog, return true
-    this.dialogRef.close(this.form.controls["PIN"]);
+    this.settingService.checkPin(parseInt(this.form.controls['PIN'].value)).subscribe(valid => {
+      if (valid) {
+        // Close the dialog, return pin to be sed in other requests
+        this.dialogRef.close(this.form.controls['PIN']);
+      }
+      else {
+        this.form.controls['PIN'].setErrors({ 'incorrect': true });
+      }
+    })
   }
 
   onDismiss(): void {

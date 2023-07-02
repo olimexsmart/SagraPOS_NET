@@ -26,4 +26,9 @@ public class SettingsAPI : ControllerBase
 
     [HttpGet]
     public IEnumerable<Printer> GetPrinters() => db.Printers;
+
+    [HttpGet]
+    public bool CheckPin([FromQuery] int pin) => db.Settings.Where(x => x.Key == "PIN")
+                                                            .Select(x => x.ValueInt)
+                                                            .First() == pin;
 }

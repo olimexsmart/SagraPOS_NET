@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ConfirmDialogModel, DialogPinComponent } from '../dialog-pin/dialog-pin.component';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogUpdateInventoryComponent } from '../dialog-update-inventory/dialog-update-inventory.component';
+import { DialogUpdateInventoryComponent, UpdateInventoryDialogModel } from '../dialog-update-inventory/dialog-update-inventory.component';
 
 @Component({
   selector: 'app-inventory-mode',
@@ -10,6 +10,7 @@ import { DialogUpdateInventoryComponent } from '../dialog-update-inventory/dialo
 })
 export class InventoryModeComponent {
   modeActive: boolean = false
+  pin: number = 0
 
   constructor(private dialog: MatDialog) { }
 
@@ -19,14 +20,10 @@ export class InventoryModeComponent {
 
   public updateInventory(entryID: number): void {
     console.log(entryID)
-    const dialogData = new ConfirmDialogModel('Attivare?', 'bomber');
-    const dialogRef = this.dialog.open(DialogUpdateInventoryComponent, {
+    const dialogData = new UpdateInventoryDialogModel(this.pin, entryID);
+    this.dialog.open(DialogUpdateInventoryComponent, {
       maxWidth: '350px',
       data: dialogData,
-    });
-    dialogRef.afterClosed().subscribe((dialogResult) => {
-      if (dialogResult.value === undefined) return
-      console.log(dialogResult.value)
     });
   }
 
@@ -43,6 +40,7 @@ export class InventoryModeComponent {
       });
       dialogRef.afterClosed().subscribe((dialogResult) => {
         if (dialogResult.value === undefined) return
+        this.pin = dialogResult.value
         this.modeActive = true
       });
     }

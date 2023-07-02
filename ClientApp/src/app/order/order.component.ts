@@ -37,11 +37,10 @@ export class OrderComponent {
   }
 
   printAndClear(): void {
-    this.orderService.postPrintOrder(this.selectedPrinter.id, this.order  ).subscribe(res => {
+    this.orderService.postPrintOrder(this.selectedPrinter.id, this.order  ).subscribe(() => {
       this.order.clear()
       this.catPresent.clear()
       this.total = 0
-      console.log(res)
     })
   }
 

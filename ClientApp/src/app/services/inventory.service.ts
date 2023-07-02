@@ -10,8 +10,14 @@ export class InventoryService {
 
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) { }
 
-   getQuantities(): Observable<Inventory[]> {
+  // TODO https://angular.io/guide/http-handle-request-errors
+
+  getQuantities(): Observable<Inventory[]> {
     return this.http.get<Inventory[]>(this.baseUrl + `GetQuantities`)
+  }
+
+  setQuantity(pin: number, entryID: number, quantity: number): Observable<any> {
+    return this.http.put(this.baseUrl + `SetQuantity?pin=${pin}&entryID=${entryID}&quantity=${quantity}`, null)
   }
 }
 

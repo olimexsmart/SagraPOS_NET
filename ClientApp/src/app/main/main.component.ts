@@ -7,7 +7,6 @@ import { MenuEntry } from '../interfaces/menu-entry';
 import { MenuCategories } from '../interfaces/menu-categories';
 import { MatDrawer } from '@angular/material/sidenav';
 import { MenuService } from '../services/menu.service';
-import { InitEmptyPrinter, Printer } from '../interfaces/printer';
 
 @Component({
   selector: 'app-main',
@@ -20,16 +19,14 @@ export class MainComponent {
   title = 'SagraPOS';
   categories: MenuCategories[] = []
   menuEntries: MenuEntry[] = []
-   badgeCount :  Inventory[] = []; //TODO dictionary o right type
-  //badgeCount :number; //dictionary o right type
+  badgeCount: Inventory[] = [];
 
   constructor(
     @Inject('BASE_URL') public baseUrl: string,
     private menuService: MenuService,
-    public inventoryService:InventoryService,
+    private inventoryService: InventoryService,
     changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher) {
-      // this.badgeCount = 1;
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this.mobileQueryListener = () => changeDetectorRef.detectChanges(); // Is this variable necessary?
     this.mobileQuery.addListener(this.mobileQueryListener); // TODO fix this deprecation
@@ -40,18 +37,10 @@ export class MainComponent {
   ngOnInit(): void {
     this.menuService.getCategories().subscribe(categories => this.categories = categories)
     this.menuService.getMenuEntries().subscribe(menuEntries => this.menuEntries = menuEntries)
-    this.inventoryService.getQuantities().subscribe(badgeCount =>
-      {
-        this.badgeCount = badgeCount
-        console.log(this.badgeCount[1])
-      })
+    this.inventoryService.getQuantities().subscribe(badgeCount => this.badgeCount = badgeCount)
     setInterval(() => {
-      this.inventoryService.getQuantities().subscribe(badgeCount =>
-        {
-          this.badgeCount = badgeCount
-          console.log(this.badgeCount[3])
-        })
-      }, 5000);
+      this.inventoryService.getQuantities().subscribe(badgeCount => this.badgeCount = badgeCount)
+    }, 5000);
   }
 
   ngAfterViewInit() {
