@@ -1,6 +1,5 @@
 namespace SagraPOS.Models
 {
-    // TODO separate in another table the image column, some API can be simplified 
     public class MenuEntry
     {
         public int ID { get; set; }

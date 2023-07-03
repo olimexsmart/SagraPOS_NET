@@ -14,6 +14,7 @@ public class PrinterHelper
     private readonly IEnumerable<Printer> printersDB;
     private readonly Dictionary<int, ImmediateNetworkPrinter> printersESC;
     private readonly bool debugMode;
+    private readonly int maxItems;
 
     public PrinterHelper(ILogger<PrinterHelper> logger,
                          IConfiguration configuration,
@@ -27,17 +28,18 @@ public class PrinterHelper
         // Init internal state from appsetting configuration                     
         if (!bool.TryParse(configuration["DebugMode"], out debugMode))
             debugMode = false;
+        // Init max items limit
+        int.TryParse(configuration["MaxItems"], out maxItems);
         // Pre-load from DB the printers available
         printersDB = db.Printers;
         // Init physical printers
         printersESC = new();
         foreach (var p in printersDB)
-            printersESC.Add(p.ID,
-                            new ImmediateNetworkPrinter(new ImmediateNetworkPrinterSettings()
-                            {
-                                ConnectionString = $"{p.IP}:{p.Port}",
-                                PrinterName = p.Name
-                            }));
+            printersESC.Add(p.ID, new ImmediateNetworkPrinter(new ImmediateNetworkPrinterSettings()
+            {
+                ConnectionString = $"{p.IP}:{p.Port}",
+                PrinterName = p.Name
+            }));
     }
 
     internal void PrintOrder(int printerID, IEnumerable<OrderEntryDTO> orderToPrint, out float total)
@@ -48,17 +50,20 @@ public class PrinterHelper
             throw new InvalidDataException("Empty order");
         // Fill these variable getting result from DB
         Dictionary<int, Dictionary<string, int>> printCategories = new();
-        bool hasTens = false; // True if some quantity ha 2 digits // TODO set a maximum quantity value
+        bool hasTens = false; // True if some quantity ha 2 digits
         foreach (var o in orderToPrint)
         {
-            // Get MenuEntry object from db
+            // Enforce maximum quantity
+            o.Quantity = Math.Min(o.Quantity, maxItems);
+            // Get MenuEntry object from DB
             MenuEntry? me = db.MenuEntries.Where(x => x.ID == o.EntryID)
-                                            .Select(x => new MenuEntry()
-                                            {
-                                                CategoryID = x.CategoryID,
-                                                Name = x.Name,
-                                                Price = x.Price
-                                            }).FirstOrDefault();
+                                          .Select(x => new MenuEntry()
+                                          {
+                                              CategoryID = x.CategoryID,
+                                              Name = x.Name,
+                                              Price = x.Price
+                                          })
+                                          .FirstOrDefault();
             if (me is null)
                 throw new KeyNotFoundException($"MenuEntry with ID {o.EntryID} not found");
             // Add entry to the dictionary
@@ -88,6 +93,10 @@ public class PrinterHelper
         // Exit if printer ID is not recognized
         if (!printersESC.ContainsKey(printerID))
             throw new KeyNotFoundException($"Printer with ID={printerID} is not configured");
+        // Load logo
+        byte[]? logo = db.Settings.Where(x => x.Key == "PrintLogo").Select(x => x.ValueBlob).First();
+        string? overLogoText = db.Settings.Where(x => x.Key == "OverLogoText").Select(x => x.ValueString).First();
+        string? underLogoText = db.Settings.Where(x => x.Key == "UnderLogoText").Select(x => x.ValueString).First();
         // Use the vars defined before to printe the receipt
         var e = new EPSON();
         ByteArrayBuilder bab = new();
@@ -122,11 +131,14 @@ public class PrinterHelper
         bab.Append(e.CenterAlign());
         bab.Append(e.SetStyles(PrintStyle.Italic | PrintStyle.Bold));
         bab.Append(e.PrintLine(""));
-        bab.Append(e.PrintLine("IL RICAVATO VIENE DEVOLUTO IN BENEFICENZA"));
-        bab.Append(e.PrintImage(System.IO.File.ReadAllBytes("logo.jpg"), true, isLegacy: true, maxWidth: 350));
+        if (overLogoText is not null)
+            bab.Append(e.PrintLine(overLogoText));
+        if (logo is not null)
+            bab.Append(e.PrintImage(logo, true, isLegacy: true, maxWidth: 350));
         bab.Append(e.SetStyles(PrintStyle.None));
         bab.Append(e.PrintLine(""));
-        bab.Append(e.PrintLine("github.com/olimexsmart/SagraPOS"));
+        if (underLogoText is not null)
+            bab.Append(e.PrintLine(underLogoText));
         bab.Append(e.FullCutAfterFeed(3));
         // Confirm printing
         printersESC[printerID].WriteAsync(bab.ToArray()).Wait();

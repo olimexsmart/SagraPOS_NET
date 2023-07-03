@@ -28,7 +28,7 @@ The stops the service, uploads all the build files and restarts the service.
 - [ ] Better spacing in tablet view (kinda too crammed)
 - [ ] Setting view (and then edit) page
 - [ ] Product view (and then edit) page
-- [ ] Date and time should be coming from client
+- [x] Date and time should be coming from client
 - [x] All assets (font, icons, ecc) loaded from LAN
 - [ ] Document here build and deploy procedure (detailed)
 - [x] Move printing to a separate class
