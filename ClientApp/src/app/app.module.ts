@@ -30,6 +30,7 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { InventoryModeComponent } from './inventory-mode/inventory-mode.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { DialogUpdateInventoryComponent } from './dialog-update-inventory/dialog-update-inventory.component'
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 
 @NgModule({
@@ -78,7 +79,8 @@ import { DialogUpdateInventoryComponent } from './dialog-update-inventory/dialog
     A11yModule,
     MatSelectModule,
     MatMenuModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatCheckboxModule
   ],
   providers: [],
   bootstrap: [AppComponent]

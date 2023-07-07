@@ -13,15 +13,15 @@ The stops the service, uploads all the build files and restarts the service.
 ## To-Be-Done
 - [ ] Error in printing 'é' (e.g. caffé)
 - [ ] Orders are not printed in category order
+- [ ] Print connection info at startup (with QR codes) (and from settings)
 - [x] Add shutdown button and light
 - [x] Manage two or more printers
 - [x] Info page
 - [x] Print info 
 - [x] Reset info
 - [x] DB table with info
-- [ ] Print connection info at startup (with QR codes) (and from settings)
 - [x] Insert in DB real data
-- [ ] Setting table in DB (put there logo.jpg)
+- [x] Setting table in DB (put there logo.jpg)
 - [ ] Swap DB API
 - [ ] Dialog for cash computations
 - [x] Fix total new line overflow
@@ -32,4 +32,5 @@ The stops the service, uploads all the build files and restarts the service.
 - [x] All assets (font, icons, ecc) loaded from LAN
 - [ ] Document here build and deploy procedure (detailed)
 - [x] Move printing to a separate class
+- [ ] Setting an inventory value to null does not hide badge (caused by CSS)
 

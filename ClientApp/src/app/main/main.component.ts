@@ -19,7 +19,7 @@ export class MainComponent {
   title = 'SagraPOS';
   categories: MenuCategories[] = []
   menuEntries: MenuEntry[] = []
-  badgeCount: Inventory[] = [];
+  badgeCount: Inventory  = {}
 
   constructor(
     @Inject('BASE_URL') public baseUrl: string,
@@ -40,7 +40,7 @@ export class MainComponent {
     this.inventoryService.getQuantities().subscribe(badgeCount => this.badgeCount = badgeCount)
     setInterval(() => {
       this.inventoryService.getQuantities().subscribe(badgeCount => this.badgeCount = badgeCount)
-    }, 5000);
+    }, 1000);
   }
 
   ngAfterViewInit() {

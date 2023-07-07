@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using SagraPOS.Models;
 
@@ -24,9 +25,9 @@ public class InventoryAPI : ControllerBase
     public Dictionary<int, int?> GetQuantities() => db.MenuEntries.ToDictionary(k => k.ID, v => v.Inventory);
 
     [HttpPut]
-    public ActionResult SetQuantity([FromQuery] int pin,
-                                    [FromQuery] int entryID,
-                                    [FromQuery] int quantity)
+    public ActionResult SetQuantity([FromQuery, Required] int pin,
+                                    [FromQuery, Required] int entryID,
+                                    [FromQuery] int? quantity)
     {
         MenuEntry? m = db.MenuEntries.SingleOrDefault(m => m.ID == entryID);
         if (m is null) return NotFound($"Menu entry with ID {entryID} not found");

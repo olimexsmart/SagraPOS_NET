@@ -20,7 +20,11 @@ export class DialogUpdateInventoryComponent {
   }
 
   onConfirm(): void {
-    this.inventoryService.setQuantity(this.data.pin, this.data.entryID, this.form.controls["newQuantity"].value).subscribe(res => {
+    let newQuantity = this.form.controls["newQuantity"].value
+    this.inventoryService.setQuantity(
+      this.data.pin, 
+      this.data.entryID, 
+      newQuantity === "" ? null : newQuantity).subscribe(res => {
       // TODO errors
       // Close the dialog, return true
       this.dialogRef.close();

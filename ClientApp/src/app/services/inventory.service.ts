@@ -12,12 +12,15 @@ export class InventoryService {
 
   // TODO https://angular.io/guide/http-handle-request-errors
 
-  getQuantities(): Observable<Inventory[]> {
-    return this.http.get<Inventory[]>(this.baseUrl + `GetQuantities`)
+  getQuantities(): Observable<Inventory> {
+    return this.http.get<Inventory>(this.baseUrl + `GetQuantities`)
   }
 
-  setQuantity(pin: number, entryID: number, quantity: number): Observable<any> {
-    return this.http.put(this.baseUrl + `SetQuantity?pin=${pin}&entryID=${entryID}&quantity=${quantity}`, null)
+  setQuantity(pin: number, entryID: number, quantity?: number): Observable<any> {
+    let quantQuery = ''
+    if (quantity !== null)
+      quantQuery = `&quantity=${quantity}`
+    return this.http.put(this.baseUrl + `SetQuantity?pin=${pin}&entryID=${entryID}${quantQuery}`, null)
   }
 }
 

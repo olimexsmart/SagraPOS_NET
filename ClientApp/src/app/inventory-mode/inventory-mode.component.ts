@@ -19,7 +19,6 @@ export class InventoryModeComponent {
   }
 
   public updateInventory(entryID: number): void {
-    console.log(entryID)
     const dialogData = new UpdateInventoryDialogModel(this.pin, entryID);
     this.dialog.open(DialogUpdateInventoryComponent, {
       maxWidth: '350px',
