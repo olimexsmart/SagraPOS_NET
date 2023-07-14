@@ -101,7 +101,7 @@ public class PrinterHelper
         var e = new EPSON();
         ByteArrayBuilder bab = new();
         // Loop on categories
-        foreach (var category in printCategories)
+        foreach (var category in printCategories.OrderBy(x => x.Key))
         {
             // Title with category name
             bab.Append(PrinterSetDimensions(0, 0));

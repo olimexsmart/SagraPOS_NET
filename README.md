@@ -12,7 +12,7 @@ The stops the service, uploads all the build files and restarts the service.
 
 ## To-Be-Done
 - [ ] Error in printing 'é' (e.g. caffé)
-- [ ] Orders are not printed in category order
+- [x] Orders are not printed in category order
 - [ ] Print connection info at startup (with QR codes) (and from settings)
 - [x] Add shutdown button and light
 - [x] Manage two or more printers

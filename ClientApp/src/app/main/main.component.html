@@ -1,8 +1,7 @@
 <!-- TOOLBAR -->
 <mat-toolbar color="primary">
-  <span>{{title}}</span>
+  <span *ngIf="!mobileQuery.matches">{{title}}</span>
   <span class="flexSpacer"></span>
-  <!-- <mat-slide-toggle>Inventario</mat-slide-toggle> -->
   <app-inventory-mode #inventoryMode></app-inventory-mode>
   <app-printer-selector #printerSelector></app-printer-selector>
   <button mat-icon-button>
