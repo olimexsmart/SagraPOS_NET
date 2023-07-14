@@ -11,8 +11,8 @@
 
 .entryCard {
     cursor: pointer;
-    width: 15rem;
-    margin: 10px;
+    width: 12rem;
+    margin: 8px;
 }
 
 .cardHead {
@@ -69,7 +69,7 @@
 
     .entryCard {
         cursor: pointer;
-        width: 10rem;
+        width: 8rem;
         margin: 5px;
     }
 

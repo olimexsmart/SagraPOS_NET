@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using SagraPOS.Helpers;
 using SagraPOS.Models;
@@ -28,7 +29,7 @@ public class SettingsAPI : ControllerBase
     public IEnumerable<Printer> GetPrinters() => db.Printers;
 
     [HttpGet]
-    public bool CheckPin([FromQuery] int pin) => db.Settings.Where(x => x.Key == "PIN")
+    public bool CheckPin([FromQuery, Required] int pin) => db.Settings.Where(x => x.Key == "PIN")
                                                             .Select(x => x.ValueInt)
                                                             .First() == pin;
 }

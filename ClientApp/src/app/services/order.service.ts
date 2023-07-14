@@ -19,7 +19,6 @@ export class OrderService {
         Quantity: value
       })
     }
-    console.log(plainOrder)
     // Sending also time because server is assumed to not have accurate time info
     return this.http.post<any>(this.baseUrl + `ConfirmOrder?printerID=${printerID}&now=${new Date().toLocaleString()}`, plainOrder)
   }

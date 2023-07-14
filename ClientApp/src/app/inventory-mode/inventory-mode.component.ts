@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { ConfirmDialogModel, DialogPinComponent } from '../dialog-pin/dialog-pin.component';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogUpdateInventoryComponent, UpdateInventoryDialogModel } from '../dialog-update-inventory/dialog-update-inventory.component';
+import { MediaMatcher } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-inventory-mode',
@@ -9,10 +10,18 @@ import { DialogUpdateInventoryComponent, UpdateInventoryDialogModel } from '../d
   styleUrls: ['./inventory-mode.component.css']
 })
 export class InventoryModeComponent {
+  mobileQuery: MediaQueryList;
+  private mobileQueryListener: () => void;
   modeActive: boolean = false
   pin: number = 0
 
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog,
+    changeDetectorRef: ChangeDetectorRef,
+    media: MediaMatcher) {
+    this.mobileQuery = media.matchMedia('(max-width: 600px)');
+    this.mobileQueryListener = () => changeDetectorRef.detectChanges(); // Is this variable necessary?
+    this.mobileQuery.addListener(this.mobileQueryListener); // TODO fix this deprecation
+  }
 
   public isActive(): boolean {
     return this.modeActive

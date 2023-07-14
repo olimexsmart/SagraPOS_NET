@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using SagraPOS.Helpers;
 using SagraPOS.Models;
@@ -19,8 +20,9 @@ public class InfoAPI : ControllerBase
     {
         this.db = db;
         this.printerService = printerService;
-        if (!int.TryParse(configuration["AdminPin"], out adminPin))
-            throw new NullReferenceException("Missing AdminPin setting");
+        adminPin = db.Settings.Where(x => x.Key == "PIN")
+                              .Select(x => x.ValueInt)
+                              .First() ?? throw new NullReferenceException("Admin PIN not set");
     }
 
     [HttpGet]
@@ -30,7 +32,7 @@ public class InfoAPI : ControllerBase
     }
 
     [HttpDelete]
-    public ActionResult ResetInfoOrders([FromQuery] int pin)
+    public ActionResult ResetInfoOrders([FromQuery, Required] int pin)
     {
         if (adminPin != pin)
             return Unauthorized("Wrong administrator pin");
