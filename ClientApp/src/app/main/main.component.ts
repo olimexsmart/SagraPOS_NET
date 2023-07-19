@@ -19,7 +19,7 @@ export class MainComponent {
   title = 'SagraPOS';
   categories: MenuCategories[] = []
   menuEntries: MenuEntry[] = []
-  badgeCount: Inventory  = {}
+  badgeCount: Inventory = {}
 
   constructor(
     @Inject('BASE_URL') public baseUrl: string,
@@ -49,5 +49,10 @@ export class MainComponent {
       if (!this.mobileQuery.matches)
         this.sidenav.open()
     })
+  }
+
+  shouldCloseOrderCheck() {
+    if (this.mobileQuery.matches)
+      this.sidenav.close()
   }
 }

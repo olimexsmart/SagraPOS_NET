@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MenuEntry } from '../interfaces/menu-entry';
 import { MenuCategories } from '../interfaces/menu-categories';
 import { OrderService } from '../services/order.service';
@@ -14,6 +14,7 @@ export class OrderComponent {
   @Input() selectedPrinter: Printer = null!
   @Input() categories: MenuCategories[] = [];
   @Input() menu: MenuEntry[] = [];
+  @Output() orderConfirmed = new EventEmitter<string>();
 
   order: Map<MenuEntry, number> = new Map()
   catPresent: Map<number, number> = new Map()
@@ -36,11 +37,20 @@ export class OrderComponent {
     this.total -= entry.price
   }
 
+  getEntriesNumber(): number {
+    let sum = 0;
+    for (const value of this.order.values()) {
+      sum += value;
+    }
+    return sum
+  }
+
   printAndClear(): void {
-    this.orderService.postPrintOrder(this.selectedPrinter.id, this.order  ).subscribe(() => {
+    this.orderService.postPrintOrder(this.selectedPrinter.id, this.order).subscribe(() => {
       this.order.clear()
       this.catPresent.clear()
       this.total = 0
+      this.orderConfirmed.emit()
     })
   }
 

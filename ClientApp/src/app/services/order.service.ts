@@ -20,7 +20,7 @@ export class OrderService {
       })
     }
     // Sending also time because server is assumed to not have accurate time info
-    return this.http.post<any>(this.baseUrl + `ConfirmOrder?printerID=${printerID}&now=${new Date().toLocaleString()}`, plainOrder)
+    return this.http.post<any>(this.baseUrl + `ConfirmOrder?printerID=${printerID}&now=${new Date().toISOString()}`, plainOrder)
   }
 }
 

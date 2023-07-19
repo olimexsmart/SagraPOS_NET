@@ -33,4 +33,10 @@ The stops the service, uploads all the build files and restarts the service.
 - [ ] Document here build and deploy procedure (detailed)
 - [x] Move printing to a separate class
 - [ ] Setting an inventory value to null does not hide badge (caused by CSS)
+- [ ] Remember ordere selection when changing screen
+- [ ] Confirm OK/NOK snackbar when performing operations (like order)
+- [x] Badge on receipt icon conting elements in order
+- [x] Order euro sign and "x" on item quantities
+- [ ] Complete log of events table (with its screen accessible from settings)
+- [ ] Info table max width on large screens
 

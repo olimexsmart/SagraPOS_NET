@@ -10,7 +10,8 @@
   <button mat-icon-button [routerLink]="['/info', printerSelector.getSelectedPrinter().id]">
     <mat-icon>info</mat-icon>
   </button>
-  <button mat-icon-button (click)="sidenav.toggle()">
+  <button mat-icon-button (click)="sidenav.toggle()" [matBadge]="order.getEntriesNumber()" matBadgePosition="after"
+    matBadgeColor="accent" matBadgeSize="small">
     <mat-icon>receipt</mat-icon>
   </button>
 </mat-toolbar>
@@ -19,7 +20,7 @@
   <mat-sidenav #sidenav position="end" class="sidenav-lateral" [mode]="mobileQuery.matches ? 'over' : 'side'"
     [fixedInViewport]="true" fixedTopGap="64">
     <app-order #order [selectedPrinter]="printerSelector.getSelectedPrinter()" [categories]="categories"
-      [menu]="menuEntries"></app-order>
+      [menu]="menuEntries" (orderConfirmed)="shouldCloseOrderCheck()"></app-order>
   </mat-sidenav>
   <!-- TABS -->
   <mat-tab-group class="makeTabGroupSticky">
