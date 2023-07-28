@@ -8,6 +8,7 @@ public class MenuDB : DbContext
 
     // Tables
     public DbSet<MenuCategory> Categories { get; set; } = null!;
+    public DbSet<PrintCategory> PrintCategories { get; set; } = null!;
     public DbSet<MenuEntry> MenuEntries { get; set; } = null!;
     public DbSet<OrderLog> OrdersLog { get; set; } = null!;
     public DbSet<OrderLogItem> OrderLogItems { get; set; } = null!;

@@ -4,6 +4,7 @@ namespace SagraPOS.Models
     {
         public int ID { get; set; }
         public int CategoryID { get; set; }
+        public int PrintCategoryID { get; set; }
         public string Name { get; set; } = null!;
         public float Price { get; set; }
         public byte[]? Image { get; set; }

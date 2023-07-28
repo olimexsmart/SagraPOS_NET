@@ -33,10 +33,20 @@ The stops the service, uploads all the build files and restarts the service.
 - [ ] Document here build and deploy procedure (detailed)
 - [x] Move printing to a separate class
 - [ ] Setting an inventory value to null does not hide badge (caused by CSS)
-- [ ] Remember ordere selection when changing screen
+- [ ] Remember order selection when changing screen
 - [ ] Confirm OK/NOK snackbar when performing operations (like order)
 - [x] Badge on receipt icon conting elements in order
 - [x] Order euro sign and "x" on item quantities
 - [ ] Complete log of events table (with its screen accessible from settings)
 - [ ] Info table max width on large screens
+- [ ] Periodic refresh with requestAnimationFrame
+- [ ] Toggle to see all items in a unique list
+- [ ] Settings to order with different logic items list (decided by the user)
+- [ ] Log entries should carry prices along, because prices could change in time
+- [ ] Custom order also for categories
+- [ ] Cut categories separate by item categories
+- [ ] Log also on which device the order was printed
+- [ ] Optional recap print in settings
+- [ ] Better recap layout
+- [ ] Abstract PrintHelper and solve P3 printer layout differences
 
