@@ -46,9 +46,10 @@ public class PrinterHelper
     {
         required public int ID { get; init; }
         required public string Name { get; init; }
-        required public int Quantity { get; init; }
+        required public int QuantityOrdered { get; init; }
+        public int NumOrdersContainingThis { get; init; } = 0;
         required public float Price { get; init; }
-        public float TotalPrice { get => Quantity * Price; }
+        public float TotalPrice { get => QuantityOrdered * Price; }
         public override bool Equals(object? obj)
         {
             if (obj is null) return false;
@@ -87,13 +88,20 @@ public class PrinterHelper
                                           .FirstOrDefault();
             if (me is null)
                 throw new KeyNotFoundException($"MenuEntry with ID {o.EntryID} not found");
+            // TODO check settings if enables
+            // Get the total sold of this item
+            // int numOrdersContainingThis = 0; // In case of settings to false
+            int numOrdersContainingThis = db.OrderLogItems.Where(x => x.MenuEntryID == o.EntryID)
+                                            .Select(x => x.OrderID)
+                                            .Distinct().Count();
             // Create an instance of the order entry
             OrderEntry orderEntry = new()
             {
                 ID = o.EntryID,
                 Name = me.Name,
-                Quantity = o.Quantity,
-                Price = me.Price
+                QuantityOrdered = o.Quantity,
+                Price = me.Price,
+                NumOrdersContainingThis = numOrdersContainingThis
             };
             // Add entry to the dictionary
             if (!printCategories.ContainsKey(me.PrintCategoryID))
@@ -116,7 +124,7 @@ public class PrinterHelper
             logger.LogInformation($"Order total: {total}");
             foreach (var pc in printCategories)
                 foreach (var pcVal in pc.Value)
-                    logger.LogInformation($"Order printing: MenuEntry={pc.Key} Quantity={pcVal.Quantity}");
+                    logger.LogInformation($"Order printing: MenuEntry={pc.Key} Quantity={pcVal.QuantityOrdered}");
             return;
         }
         // Exit if printer ID is not recognized
@@ -126,7 +134,7 @@ public class PrinterHelper
         byte[]? logo = db.Settings.Where(x => x.Key == "PrintLogo").Select(x => x.ValueBlob).First();
         string? overLogoText = db.Settings.Where(x => x.Key == "OverLogoText").Select(x => x.ValueString).First();
         string? underLogoText = db.Settings.Where(x => x.Key == "UnderLogoText").Select(x => x.ValueString).First();
-        // Use the vars defined before to printe the receipt
+        // Use the vars defined before to print the receipt
         var e = new EPSON();
         ByteArrayBuilder bab = new();
         // Loop on categories
@@ -145,9 +153,14 @@ public class PrinterHelper
             foreach (var entry in category.Value)
             {
                 if (hasTens)
-                    bab.Append(e.PrintLine($"{entry.Name.ToUpper(),-20}x{entry.Quantity,2}"));
+                    bab.Append(e.PrintLine($"{entry.Name.ToUpper(),-20}x{entry.QuantityOrdered,2}"));
                 else
-                    bab.Append(e.PrintLine($"{entry.Name.ToUpper(),-21}x{entry.Quantity,1}"));
+                    bab.Append(e.PrintLine($"{entry.Name.ToUpper(),-21}x{entry.QuantityOrdered,1}"));
+                // Prenotation number
+                // TODO make this settings-configurable
+                bab.Append(e.SetStyles(PrintStyle.None));
+                bab.Append(PrinterSetDimensions(1, 1));
+                bab.Append(e.PrintLine($"PRENOTAZIONE {entry.NumOrdersContainingThis}"));
             }
             bab.Append(e.FullCutAfterFeed(3));
         }
@@ -168,15 +181,15 @@ public class PrinterHelper
             {
                 if (hasTens)
                 {
-                    bab.Append(e.Print($"{entry.Quantity,-2}x{entry.Name.ToUpper(),-16}"));
+                    bab.Append(e.Print($"{entry.QuantityOrdered,-2}x{entry.Name.ToUpper(),-15}"));
                     bab.Append(PrintEuro(e));
-                    bab.Append(e.PrintLine($"{entry.TotalPrice:.0}"));
+                    bab.Append(e.PrintLine($"{entry.TotalPrice:.00}"));
                 }
                 else
                 {
-                    bab.Append(e.Print($"{entry.Quantity,-1}x{entry.Name.ToUpper(),-17}"));
+                    bab.Append(e.Print($"{entry.QuantityOrdered,-1}x{entry.Name.ToUpper(),-16}"));
                     bab.Append(PrintEuro(e));
-                    bab.Append(e.PrintLine($"{entry.TotalPrice:.0}"));
+                    bab.Append(e.PrintLine($"{entry.TotalPrice:.00}"));
                 }
             }
         }

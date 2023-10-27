@@ -60,11 +60,13 @@ public class InfoAPI : ControllerBase
 
     private InfoOrdersDTO GatherInfo()
     {
-        InfoOrdersDTO iod = new();
-        // Complete money total
-        iod.OrdersTotal = db.OrdersLog.Where(x => x.Valid).Sum(x => x.Total);
-        // Total orders
-        iod.NumOrders = db.OrdersLog.Where(x => x.Valid).Count();
+        InfoOrdersDTO iod = new()
+        {
+            // Complete money total
+            OrdersTotal = db.OrdersLog.Where(x => x.Valid).Sum(x => x.Total),
+            // Total orders
+            NumOrders = db.OrdersLog.Where(x => x.Valid).Count()
+        };
         // Total number of items ordered
         int totalItems = db.OrderLogItems.Where(x => x.Valid).Sum(x => x.Quantity);
         if (totalItems != 0)
@@ -73,11 +75,13 @@ public class InfoAPI : ControllerBase
             var menuEntries = db.MenuEntries;
             foreach (var me in menuEntries)
             {
-                InfoOrdersDTO.InfoOrderEntry ioe = new();
-                ioe.MenuEntryName = me.Name;
-                ioe.QuantitySold = db.OrderLogItems
+                InfoOrdersDTO.InfoOrderEntry ioe = new()
+                {
+                    MenuEntryName = me.Name,
+                    QuantitySold = db.OrderLogItems
                                      .Where(x => x.MenuEntryID == me.ID && x.Valid)
-                                     .Sum(x => x.Quantity);
+                                     .Sum(x => x.Quantity)
+                };
                 ioe.TotalSold = ioe.QuantitySold * me.Price;
                 ioe.TotalPercentage = ((float)ioe.QuantitySold) / totalItems;
                 ioe.TotalSoldPercentage = ((float)ioe.TotalSold) / iod.OrdersTotal;
