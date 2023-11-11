@@ -5,8 +5,13 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-        var builder = WebApplication.CreateBuilder(args);
-
+        var builder = WebApplication.CreateBuilder();
+        if (!args.Contains("--nocli"))
+        {
+            builder.Logging.ClearProviders();
+            Thread cliThread = new(CLIRunner.Start);
+            cliThread.Start();
+        }
         // Add services to the container.
         builder.Services.AddControllers();
         // TODO field ID gets serialized as "id" and I don't like it (consider switching to newtosoft json)
