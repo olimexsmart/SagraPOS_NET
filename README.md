@@ -1,3 +1,7 @@
+# PROJECT ARCHIVED
+This first version works well, but it's not easily deployable. It requires to be familiar with the terminal and some basic network configuration. 
+A project with the same name con be found on my profile. The backend was rewritten in Node and it's packaged as an Electron app.
+
 # SagraPOS
 
 Open Source receipt printing for simple events
